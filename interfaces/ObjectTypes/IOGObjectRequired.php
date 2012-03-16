@@ -1,10 +1,14 @@
 <?php
 
 /**
- * Defines a basic open graph object
+ * Interface encompassing required fields for an opengraph object.
+ * This interface may be used on any data object that explicitly defines mandatory methods, as opposed to 
+ * classes that may instead implement those methods in decorators, but it is not necessary to do so as long
+ * as these are implemented in those decorators.
  * @author Damian Mooyman
+ * @see IOGObject
  */
-interface IOGObject
+interface IOGObjectRequired extends IOGObject
 {
     /**
      * Determines the OpenGraph Title
@@ -22,13 +26,7 @@ interface IOGObject
     
     /**
      * Determines the image(s) to use for this object
-     * @return Image[]|Image
+     * @return Image[]|Image|string[]|string The image(s) or url(s) to image(s)
      */
     function OGImage();
-    
-    /**
-     * URI to this object
-     * Named as below to prevent having to wrap the {@link SiteTree::AbsoluteLink} method explicitly
-     */
-    function AbsoluteLink();
 }

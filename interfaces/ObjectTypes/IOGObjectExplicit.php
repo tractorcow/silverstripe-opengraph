@@ -7,17 +7,17 @@
  * @author Damian Mooyman
  * @see IOGObject
  */
-interface IOGObjectExplicit extends IOGObject
+interface IOGObjectExplicit extends IOGObjectRequired
 {
     /**
      * Any attached audio files
-     * @return File[]|File
+     * @return File[]|File|string[]|string The file(s) or url(s) to file(s)
      */
     function OGAudio();
     
     /**
      * Any attached video files
-     * @return File[]|File
+     * @return File[]|File|string[]|string The file(s) or url(s) to file(s)
      */
     function OGVideo();
     

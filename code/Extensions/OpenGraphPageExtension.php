@@ -8,18 +8,6 @@
 class OpenGraphPageExtension extends DataObjectDecorator implements IOGObjectExplicit
 {
     public static $default_image = '/opengraph/images/logo.gif';
-    public static $builder_class = 'OpenGraphTagBuilder';
-    
-    /**
-     * @var IMetaTagBuilder
-     */
-    protected $tagBuilder = null;
-    
-    public function __construct()
-    {
-        parent::__construct();
-        $this->tagBuilder = new self::$builder_class();
-    }
 
     /**
      * Property for retrieving the opengraph namespace html tag(s).
@@ -28,6 +16,8 @@ class OpenGraphPageExtension extends DataObjectDecorator implements IOGObjectExp
      */
     public function getOGNS()
     {
+        // todo : Should custom namespace be injected here, or left up to user code?
+        
         $ns = ' xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml"';
         if ($this->owner instanceof IOGMusic)
             $ns .= ' xmlns:music="http://ogp.me/ns/music#"';
@@ -48,10 +38,38 @@ class OpenGraphPageExtension extends DataObjectDecorator implements IOGObjectExp
     }
 
 
+    /**
+     * Determines the tag builder to use for this object
+     * @return IOpenGraphObjectBuilder
+     */
+    protected function getTagBuilder()
+    {
+        // Determine type
+        $type = $this->owner->getOGType();
+        if(empty($type))
+            return null;
+        
+        // Determine prototype specification for this object type
+        $types = OpenGraph::$object_types;
+        if(!isset($types[$type]))
+            return null;
+        $prototype = OpenGraph::$object_types[$type];
+        
+        // Build tag builder for this prototype
+        $builderClass = $prototype[1];
+        return new $builderClass();
+    }
+
     public function MetaTags(&$tags)
     {
+        // Generate tag builder
+        $builder = $this->getTagBuilder();
+        if(!$builder)
+            return;
+        
+        $config = SiteConfig::current_site_config();
         // Default tags
-        $this->tagBuilder->BuildTags($tags, $this->owner);
+        $builder->BuildTags($tags, $this->owner, $config);
     }
 
     /**
@@ -60,35 +78,12 @@ class OpenGraphPageExtension extends DataObjectDecorator implements IOGObjectExp
      */
     public function getOGType()
     {
-        // music types
-        if ($this->owner instanceof IOGMusicAlbum)
-            return OGTypes::Music_Album;
-        if ($this->owner instanceof IOGMusicPlaylist)
-            return OGTypes::Music_Playlist;
-        if ($this->owner instanceof IOGMusicRadioStation)
-            return OGTypes::Music_RadioStation;
-        if ($this->owner instanceof IOGMusicSong)
-            return OGTypes::Music_Song;
-
-        // video types
-        if ($this->owner instanceof IOGVideoEpisode)
-            return OGTypes::Video_Episode;
-        if ($this->owner instanceof IOGVideoTVShow)
-            return OGTypes::Video_TVShow;
-        if ($this->owner instanceof IOGVideoMovie)
-            return OGTypes::Video_Movie;
-        if ($this->owner instanceof IOGVideoOther)
-            return OGTypes::Video_Other;
-
-        // no-vertical types
-        if ($this->owner instanceof IOGProfile)
-            return OGTypes::Profile;
-        if ($this->owner instanceof IOGArticle)
-            return OGTypes::Article;
-        if ($this->owner instanceof IOGBook)
-            return OGTypes::Book;
-        if ($this->owner instanceof IOGWebsite)
-            return OGTypes::Website;
+        foreach(OpenGraph::$object_types as $type => $details)
+        {
+            $interface = $details[0];
+            if ($this->owner instanceof $interface)
+                return $type;
+        }
 
         return OGTypes::DefaultType;
     }
@@ -126,7 +121,7 @@ class OpenGraphPageExtension extends DataObjectDecorator implements IOGObjectExp
 
     public function OGVideo()
     {
-        // No video by defalut
+        // No video by default
     }
 
     public function getOGDescription()

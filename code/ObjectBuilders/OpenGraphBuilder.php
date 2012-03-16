@@ -3,9 +3,8 @@
 /**
  * @author Damian Mooyman
  */
-class OpenGraphTagBuilder implements IMetaTagBuilder
+abstract class OpenGraphBuilder implements IOpenGraphObjectBuilder
 {
-
     protected $mimeTypes = null;
 
     protected function loadMimeTypes()
@@ -62,14 +61,37 @@ class OpenGraphTagBuilder implements IMetaTagBuilder
             return $this->mimeTypes[$extension];
     }
 
-    public function AppendTag(&$tags, $name, $content)
+     /**
+     * Generatse a <meta /> element and appends it to a set of header tags
+     * @param string $tags The current tag string to append these to
+     * @param string $name Meta name attribute value
+     * @param string $content Meta content attribute value
+     */
+    protected function appendTag(&$tags, $name, $content)
     {
         if (empty($content))
             return;
+
+        // Handle repeated elements
+        if (is_array($content))
+        {
+            foreach ($content as $item)
+                $this->appendTag($tags, $name, $item);
+            return;
+        }
+        
+        // base case
         $tags .= sprintf("<meta name=\"%s\" content=\"%s\" />\n", Convert::raw2att($name), Convert::raw2att($content));
     }
 
-    public function AppendLink(&$tags, $rel, $link, $type = null)
+    /**
+     * Generates a <link /> element and appends it to a set of header tags
+     * @param string $tags The current tag string to append these to
+     * @param string $rel The rel attribute value
+     * @param string $link URL to the linked resource
+     * @param string $type Mime type of the resource, if known
+     */
+    protected function appendLink(&$tags, $rel, $link, $type = null)
     {
         if (empty($rel) || empty($link))
             return;
@@ -80,12 +102,50 @@ class OpenGraphTagBuilder implements IMetaTagBuilder
                         : $this->getMimeType($link)
         );
     }
+    
+    /**
+     * Builds a list of profile links
+     * @param string $tags The current tag string to append these two
+     * @param string $namespace The namespace to use for this element
+     * @param IOGProfile[]|IOGProfile|string[]|string $value A single, or list of profiles
+     */
+    protected function appendRelatedProfileTags(&$tags, $namespace, $value)
+    {
+        if (empty($value))
+            return;
+
+        // Handle situation where multiple items are presented
+        if (is_array($value) || $value instanceof DataObjectSet)
+        {
+            foreach ($value as $profile)
+                $this->appendRelatedProfileTags($tags, $namespace, $profile);
+            return;
+        }
+
+        // Handle explicit profile object
+        if ($value instanceof IOGProfile)
+        {
+            /* @var $value IOGProfile */
+            $this->appendTag($tags, $namespace, $value->AbsoluteLink());
+            return;
+        }
+
+        // Handle image URL being given
+        if (is_string($value))
+        {
+            $this->appendTag($tags, $namespace, $value);
+            return;
+        }
+
+        // Fail if could not determine presented value type
+        trigger_error('Invalid profile type: ' . gettype($value), E_USER_ERROR);
+    }
 
     /**
      * Build a list of linked file tags for the specified value and append them to a string
      * @param string $tags The current tag string to append these to
      * @param string $namespace The namespace to use for this element
-     * @param File[]|File|string[]|string $value Either an File object, string to the (non https) image url, or a list of the former
+     * @param IMediaFile[]|IMediaFile|File[]|File|string[]|string $value Either an File object, string to the (non https) image url, or a list of the former
      * @param string $https The HTTPS url if available
      */
     protected function appendMediaMetaTags(&$tags, $namespace, $value, $https = null)
@@ -101,9 +161,10 @@ class OpenGraphTagBuilder implements IMetaTagBuilder
             return;
         }
 
-        // Handle explicit image object
+        // Handle File objects
         if ($value instanceof File)
         {
+            /* @var $value IMediaFile */
             if (!$value->exists())
                 return;
 
@@ -114,6 +175,15 @@ class OpenGraphTagBuilder implements IMetaTagBuilder
              */
             $this->appendTag($tags, "$namespace:width", $value->Width);
             $this->appendTag($tags, "$namespace:height", $value->Height);
+            return;
+        }
+        
+        // Handle IMediaFile objects
+        if ($value instanceof IMediaFile)
+        {
+            $this->appendMediaMetaTags($tags, $namespace, $value->getAbsoluteURL());
+            $this->appendTag($tags, "$namespace:width", $value->getWidth());
+            $this->appendTag($tags, "$namespace:height", $value->getHeight());
             return;
         }
 
@@ -163,7 +233,7 @@ class OpenGraphTagBuilder implements IMetaTagBuilder
             $this->appendTag($tags, 'og:locale', $locales);
     }
 
-    protected function appendDefaultMetaTags(&$tags, $object)
+    protected function appendDefaultMetaTags(&$tags, DataObject $object)
     {
         /* @var $object IOGObjectExplicit */
         $this->appendTag($tags, 'og:title', $object->getOGTitle());
@@ -181,10 +251,29 @@ class OpenGraphTagBuilder implements IMetaTagBuilder
         $this->appendTag($tags, 'og:site_name', $object->getOGSiteName());
         $this->appendLocales($tags, $object->getOGLocales());
     }
-
-    public function BuildTags(&$tags, DataObject $object)
+    
+    protected function appendApplicationMetaTags(&$tags, SiteConfig $config)
     {
-        return $this->appendDefaultMetaTags(&$tags, $object);
+        /* @var $config IOGApplication */
+        $this->appendTag($tags, 'fb:admins', $config->getOGAdminID());
+        $this->appendTag($tags, 'fb:app_id', $config->getOGApplicationID());
+    }
+    
+    protected function appendDateTag(&$tags, $name, $date)
+    {
+        if(empty($date))
+            return;
+        
+        if(!($date instanceof DateTime))
+            $date = new DateTime($date);
+        
+        $this->appendTag($tags, $name, $date->format(DateTime::ISO8601));
+    }
+
+    public function BuildTags(&$tags, $object, $config)
+    {
+        $this->appendDefaultMetaTags($tags, $object);
+        $this->appendApplicationMetaTags($tags, $config);
     }
 
 }

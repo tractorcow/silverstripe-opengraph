@@ -3,11 +3,11 @@
 /**
  * @author Damian Mooyman
  */
-interface IOGBook extends IOGTagged, IOGAuthored
+interface IOGBook extends IOGAuthoredTagged
 {
     /**
      * Returns the release date of this book
-     * @return DateTime The date of release 
+     * @return DateTime|string The date of release 
      */
     function getOGBookReleaseDate();
     

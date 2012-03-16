@@ -15,13 +15,13 @@ interface IOGVideoActor
     
     /**
      * The video
-     * @return IOGVideo 
+     * @return IOGVideo|string The video object or url to video
      */
     function OGVideo();
     
     /**
      * The profile of the actor
-     * @return IOGProfile 
+     * @return IOGProfile|string The profile object or url to profile
      */
     function OGActor();
 }

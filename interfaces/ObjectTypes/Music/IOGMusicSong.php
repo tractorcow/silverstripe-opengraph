@@ -13,7 +13,8 @@ interface IOGMusicSong extends IOGMusicComposed {
     
     /**
      * The album(s) this song belongs to
-     * @return IOGSongAlbum[]|IOGSongAlbum|IOGMusicAlbum[]|IOGMusicAlbum Either a single albumn or list of albums
+     * @return IOGSongAlbum[]|IOGSongAlbum|IOGMusicAlbum[]|IOGMusicAlbum|string[]|string Album(s) related to this 
+     * song or url(s) to album(s)
      */
     function OGMusicAlbums();
 }

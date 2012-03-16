@@ -7,13 +7,13 @@ interface IOGSongAlbum
 {
     /**
      * The song
-     * @return IOGMusicSong 
+     * @return IOGMusicSong|string Song or url to song
      */
     function OGSong();
     
     /**
      * The album
-     * @return IOGMusicAlbum 
+     * @return IOGMusicAlbum|string Album or url to album
      */
     function OGAlbum();
     
