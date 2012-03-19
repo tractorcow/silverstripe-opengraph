@@ -5,7 +5,18 @@
  */
 abstract class OpenGraphBuilder implements IOpenGraphObjectBuilder
 {
+
     protected $mimeTypes = null;
+
+    protected function isValueIterable($value)
+    {
+        return is_array($value) || $value instanceof DataObjectSet;
+    }
+    
+    protected function isValueLinkable($value)
+    {
+        return $value instanceof IOGObject || $value instanceof SiteTree;
+    }
 
     protected function loadMimeTypes()
     {
@@ -61,11 +72,11 @@ abstract class OpenGraphBuilder implements IOpenGraphObjectBuilder
             return $this->mimeTypes[$extension];
     }
 
-     /**
-     * Generatse a <meta /> element and appends it to a set of header tags
+    /**
+     * Generates a <meta /> element and appends it to a set of header tags
      * @param string $tags The current tag string to append these to
      * @param string $name Meta name attribute value
-     * @param string $content Meta content attribute value
+     * @param mixed $content Meta content attribute value(s)
      */
     protected function appendTag(&$tags, $name, $content)
     {
@@ -73,15 +84,37 @@ abstract class OpenGraphBuilder implements IOpenGraphObjectBuilder
             return;
 
         // Handle repeated elements
-        if (is_array($content))
+        if ($this->isValueIterable($content))
         {
             foreach ($content as $item)
                 $this->appendTag($tags, $name, $item);
             return;
         }
-        
-        // base case
-        $tags .= sprintf("<meta name=\"%s\" content=\"%s\" />\n", Convert::raw2att($name), Convert::raw2att($content));
+
+        // Handle links to resources (either IOGObject or basic SiteTree
+        if ($this->isValueLinkable($content))
+            return $this->appendTag($tags, $name, $content->AbsoluteLink());
+
+        // check tag type
+        if (is_scalar($content))
+            return $tags .= sprintf("<meta name=\"%s\" content=\"%s\" />\n", Convert::raw2att($name),
+                    Convert::raw2att($content));
+
+        trigger_error('Invalid tag type: ' . gettype($content), E_USER_ERROR);
+    }
+
+    /**
+     * Append a list of tags, which may be either an array, or a comma-separated string
+     * @param string $tags The current tag string to append these to
+     * @param string $name Meta name attribute value
+     * @param array|string $value Tag list
+     */
+    protected function appendRelatedTags(&$tags, $name, $value)
+    {
+        if (is_string($value))
+            $value = explode(',', $value);
+
+        $this->appendTag($tags, $name, $value);
     }
 
     /**
@@ -102,7 +135,7 @@ abstract class OpenGraphBuilder implements IOpenGraphObjectBuilder
                         : $this->getMimeType($link)
         );
     }
-    
+
     /**
      * Builds a list of profile links
      * @param string $tags The current tag string to append these two
@@ -111,34 +144,8 @@ abstract class OpenGraphBuilder implements IOpenGraphObjectBuilder
      */
     protected function appendRelatedProfileTags(&$tags, $namespace, $value)
     {
-        if (empty($value))
-            return;
-
-        // Handle situation where multiple items are presented
-        if (is_array($value) || $value instanceof DataObjectSet)
-        {
-            foreach ($value as $profile)
-                $this->appendRelatedProfileTags($tags, $namespace, $profile);
-            return;
-        }
-
-        // Handle explicit profile object
-        if ($value instanceof IOGProfile)
-        {
-            /* @var $value IOGProfile */
-            $this->appendTag($tags, $namespace, $value->AbsoluteLink());
-            return;
-        }
-
-        // Handle image URL being given
-        if (is_string($value))
-        {
-            $this->appendTag($tags, $namespace, $value);
-            return;
-        }
-
-        // Fail if could not determine presented value type
-        trigger_error('Invalid profile type: ' . gettype($value), E_USER_ERROR);
+        // Treat profiles as generic objects
+        return $this->appendTag($tags, $namespace, $value);
     }
 
     /**
@@ -154,7 +161,7 @@ abstract class OpenGraphBuilder implements IOpenGraphObjectBuilder
             return;
 
         // Handle situation where multiple items are presented
-        if (is_array($value) || $value instanceof DataObjectSet)
+        if ($this->isValueIterable($value))
         {
             foreach ($value as $file)
                 $this->appendMediaMetaTags($tags, $namespace, $file);
@@ -177,7 +184,7 @@ abstract class OpenGraphBuilder implements IOpenGraphObjectBuilder
             $this->appendTag($tags, "$namespace:height", $value->Height);
             return;
         }
-        
+
         // Handle IMediaFile objects
         if ($value instanceof IMediaFile)
         {
@@ -251,22 +258,22 @@ abstract class OpenGraphBuilder implements IOpenGraphObjectBuilder
         $this->appendTag($tags, 'og:site_name', $object->getOGSiteName());
         $this->appendLocales($tags, $object->getOGLocales());
     }
-    
+
     protected function appendApplicationMetaTags(&$tags, SiteConfig $config)
     {
         /* @var $config IOGApplication */
         $this->appendTag($tags, 'fb:admins', $config->getOGAdminID());
         $this->appendTag($tags, 'fb:app_id', $config->getOGApplicationID());
     }
-    
+
     protected function appendDateTag(&$tags, $name, $date)
     {
-        if(empty($date))
+        if (empty($date))
             return;
-        
-        if(!($date instanceof DateTime))
+
+        if (!($date instanceof DateTime))
             $date = new DateTime($date);
-        
+
         $this->appendTag($tags, $name, $date->format(DateTime::ISO8601));
     }
 

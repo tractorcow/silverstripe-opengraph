@@ -10,7 +10,7 @@ class OGArticle extends OpenGraphBuilder
         $this->appendDateTag($tags, 'article:expiration_time', $article->getOGArticleExpirationTime());
         $this->appendRelatedProfileTags($tags, 'og:author', $article->OGAuthors());
         $this->appendTag($tags, 'article:section', $article->getOGArticleSection());
-        $this->appendTag($tags, 'article:tag', $article->getOGTags());
+        $this->appendRelatedTags($tags, 'article:tag', $article->getOGTags());
     }
 
     public function BuildTags(&$tags, $object, $config)

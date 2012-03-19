@@ -8,7 +8,7 @@ class OGBook extends OpenGraphBuilder
         $this->appendRelatedProfileTags($tags, 'book:author', $book->OGAuthors());
         $this->appendTag($tags, 'book:isbn', $book->getOGBookISBN());
         $this->appendDateTag($tags, 'book:release_date', $book->getOGBookReleaseDate());
-        $this->appendTag($tags, 'book:tag', $book->getOGTags());
+        $this->appendRelatedTags($tags, 'book:tag', $book->getOGTags());
     }
 
     public function BuildTags(&$tags, $object, $config)
