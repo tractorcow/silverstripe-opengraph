@@ -264,6 +264,10 @@ abstract class OpenGraphBuilder implements IOpenGraphObjectBuilder
         /* @var $config IOGApplication */
         $this->appendTag($tags, 'fb:admins', $config->getOGAdminID());
         $this->appendTag($tags, 'fb:app_id', $config->getOGApplicationID());
+        
+        //optional OG fields from SiteConfig
+        $this->appendTag($tags, 'og:locality', $config->getOGlocality());
+        $this->appendTag($tags, 'og:country-name', $config->getOGcountryName());
     }
 
     protected function appendDateTag(&$tags, $name, $date)
