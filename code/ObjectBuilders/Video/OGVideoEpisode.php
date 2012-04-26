@@ -7,7 +7,7 @@ class OGVideoEpisode extends OGVideo
 {
     protected function appendEpisodeTags(&$tags, IOGVideoEpisode $video)
     {
-        $this->appendTag($tags, 'video:series', $video->OGVideoSeries());
+        $this->AppendTag($tags, 'video:series', $video->OGVideoSeries());
     }
 
     public function BuildTags(&$tags, $object, $config)

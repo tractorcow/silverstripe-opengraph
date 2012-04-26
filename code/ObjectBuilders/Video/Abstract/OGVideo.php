@@ -29,17 +29,17 @@ abstract class OGVideo extends OpenGraphBuilder
         if ($value instanceof IOGVideoActor) /* @var $value IOGVideoActor */
         {
             $this->appendRelatedActorList($tags, $namespace, $value->OGActor());
-            $this->appendTag($tags, "$namespace:role", $value->getOGRole());
+            $this->AppendTag($tags, "$namespace:role", $value->getOGRole());
             return;
         }
         
         // Handle single song object
         if($value instanceof IOGProfile) /* @var $value IOGProfile */
-            return $this->appendTag($tags, $namespace, $value->AbsoluteLink());
+            return $this->AppendTag($tags, $namespace, $value->AbsoluteLink());
 
         // Handle image URL being given
         if (is_string($value))
-            return $this->appendTag($tags, $namespace, $value);
+            return $this->AppendTag($tags, $namespace, $value);
 
         // Fail if could not determine presented value type
         trigger_error('Invalid song type: ' . gettype($value), E_USER_ERROR);
@@ -50,7 +50,7 @@ abstract class OGVideo extends OpenGraphBuilder
         $this->appendRelatedActorList($tags, 'video:actor', $video->OGVideoActors());
         $this->appendRelatedProfileTags($tags, 'video:director', $video->OGVideoDirectors());
         $this->appendRelatedProfileTags($tags, 'video:writer', $video->OGVideoWriters());
-        $this->appendTag($tags, 'video:duration', $video->getOGVideoDuration());
+        $this->AppendTag($tags, 'video:duration', $video->getOGVideoDuration());
         $this->appendDateTag($tags, 'video:release_date', $video->getOGVideoReleaseDate());
         $this->appendRelatedTags($tags, 'video:tag', $video->getOGTags());
     }

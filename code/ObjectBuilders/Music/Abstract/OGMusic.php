@@ -31,18 +31,18 @@ abstract class OGMusic extends OpenGraphBuilder
         if ($value instanceof IOGSongAlbum) /* @var $value IOGSongAlbum */
         {
             $this->appendRelatedSongList($tags, $namespace, $value->OGSong());
-            $this->appendTag($tags, "$namespace:disc", $value->getOGDisc());
-            $this->appendTag($tags, "$namespace:track", $value->getOGTrack());
+            $this->AppendTag($tags, "$namespace:disc", $value->getOGDisc());
+            $this->AppendTag($tags, "$namespace:track", $value->getOGTrack());
             return;
         }
         
         // Handle single song object
         if($value instanceof IOGMusicSong) /* @var $value IOGMusicSong */
-            return $this->appendTag($tags, $namespace, $value->AbsoluteLink());
+            return $this->AppendTag($tags, $namespace, $value->AbsoluteLink());
 
         // Handle image URL being given
         if (is_string($value))
-            return $this->appendTag($tags, $namespace, $value);
+            return $this->AppendTag($tags, $namespace, $value);
 
         // Fail if could not determine presented value type
         trigger_error('Invalid song type: ' . gettype($value), E_USER_ERROR);

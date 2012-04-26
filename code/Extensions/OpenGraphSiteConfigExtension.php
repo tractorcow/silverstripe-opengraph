@@ -2,9 +2,8 @@
 
 class OpenGraphSiteConfigExtension extends DataObjectDecorator implements IOGApplication
 {
-    const SiteConfig = 'SiteConfig';
-    public static $application_id = self::SiteConfig;
-    public static $admin_id = self::SiteConfig;
+    public static $application_id = 'SiteConfig';
+    public static $admin_id = 'SiteConfig';
     public static $default_country = '';
     public static $allowed_countries = null;
 
@@ -26,9 +25,9 @@ class OpenGraphSiteConfigExtension extends DataObjectDecorator implements IOGApp
 
     public function updateCMSFields(FieldSet &$fields)
     {
-        if (self::$application_id === self::SiteConfig)
+        if (self::$application_id === 'SiteConfig')
             $fields->addFieldToTab('Root.Facebook', new TextField('OGApplicationID', 'FB Application ID', null, 255));
-        if (self::$admin_id === self::SiteConfig)
+        if (self::$admin_id === 'SiteConfig')
             $fields->addFieldToTab('Root.Facebook', new TextField('OGAdminID', 'FB Admin ID(s)', null, 255));
         
         $fields->addFieldToTab('Root.OpenGraph', new TextField('OGlocality', 'Locality', null, 255));
@@ -38,14 +37,14 @@ class OpenGraphSiteConfigExtension extends DataObjectDecorator implements IOGApp
 
     public function getOGAdminID()
     {
-        if (self::$admin_id === self::SiteConfig)
+        if (self::$admin_id === 'SiteConfig')
             return $this->owner->getField('OGAdminID');
         return self::$admin_id;
     }
 
     public function getOGApplicationID()
     {
-        if (self::$application_id === self::SiteConfig)
+        if (self::$application_id === 'SiteConfig')
             return $this->owner->getField('OGApplicationID');
         return self::$application_id;
     }

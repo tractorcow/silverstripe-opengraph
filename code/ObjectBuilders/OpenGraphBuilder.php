@@ -3,7 +3,7 @@
 /**
  * @author Damian Mooyman
  */
-abstract class OpenGraphBuilder implements IOpenGraphObjectBuilder
+abstract class OpenGraphBuilder extends Object implements IOpenGraphObjectBuilder
 {
 
     protected $mimeTypes = null;
@@ -72,13 +72,7 @@ abstract class OpenGraphBuilder implements IOpenGraphObjectBuilder
             return $this->mimeTypes[$extension];
     }
 
-    /**
-     * Generates a <meta /> element and appends it to a set of header tags
-     * @param string $tags The current tag string to append these to
-     * @param string $name Meta name attribute value
-     * @param mixed $content Meta content attribute value(s)
-     */
-    protected function appendTag(&$tags, $name, $content)
+    public function AppendTag(&$tags, $name, $content)
     {
         if (empty($content))
             return;
@@ -87,13 +81,13 @@ abstract class OpenGraphBuilder implements IOpenGraphObjectBuilder
         if ($this->isValueIterable($content))
         {
             foreach ($content as $item)
-                $this->appendTag($tags, $name, $item);
+                $this->AppendTag($tags, $name, $item);
             return;
         }
 
         // Handle links to resources (either IOGObject or basic SiteTree
         if ($this->isValueLinkable($content))
-            return $this->appendTag($tags, $name, $content->AbsoluteLink());
+            return $this->AppendTag($tags, $name, $content->AbsoluteLink());
 
         // check tag type
         if (is_scalar($content))
@@ -114,7 +108,7 @@ abstract class OpenGraphBuilder implements IOpenGraphObjectBuilder
         if (is_string($value))
             $value = explode(',', $value);
 
-        $this->appendTag($tags, $name, $value);
+        $this->AppendTag($tags, $name, $value);
     }
 
     /**
@@ -145,7 +139,7 @@ abstract class OpenGraphBuilder implements IOpenGraphObjectBuilder
     protected function appendRelatedProfileTags(&$tags, $namespace, $value)
     {
         // Treat profiles as generic objects
-        return $this->appendTag($tags, $namespace, $value);
+        return $this->AppendTag($tags, $namespace, $value);
     }
 
     /**
@@ -180,8 +174,8 @@ abstract class OpenGraphBuilder implements IOpenGraphObjectBuilder
              * If you have the mediadata extension installed, this should correctly populate video width/height elements
              * @link https://github.com/tractorcow/silverstripe-mediadata
              */
-            $this->appendTag($tags, "$namespace:width", $value->Width);
-            $this->appendTag($tags, "$namespace:height", $value->Height);
+            $this->AppendTag($tags, "$namespace:width", $value->Width);
+            $this->AppendTag($tags, "$namespace:height", $value->Height);
             return;
         }
 
@@ -189,8 +183,8 @@ abstract class OpenGraphBuilder implements IOpenGraphObjectBuilder
         if ($value instanceof IMediaFile)
         {
             $this->appendMediaMetaTags($tags, $namespace, $value->getAbsoluteURL());
-            $this->appendTag($tags, "$namespace:width", $value->getWidth());
-            $this->appendTag($tags, "$namespace:height", $value->getHeight());
+            $this->AppendTag($tags, "$namespace:width", $value->getWidth());
+            $this->AppendTag($tags, "$namespace:height", $value->getHeight());
             return;
         }
 
@@ -211,10 +205,10 @@ abstract class OpenGraphBuilder implements IOpenGraphObjectBuilder
                 $this->appendLink($tags, 'image_src', $value);
 
             // Build tags
-            $this->appendTag($tags, $namespace, $value);
+            $this->AppendTag($tags, $namespace, $value);
             if ($https)
-                $this->appendTag($tags, "$namespace:secure_url", $https);
-            $this->appendTag($tags, "$namespace:type", $mimeType);
+                $this->AppendTag($tags, "$namespace:secure_url", $https);
+            $this->AppendTag($tags, "$namespace:type", $mimeType);
             return;
         }
 
@@ -234,18 +228,18 @@ abstract class OpenGraphBuilder implements IOpenGraphObjectBuilder
             $mainLocale = array_shift($locales);
             $this->appendLocales($tags, $mainLocale);
             foreach ($locales as $locale)
-                $this->appendTag($tags, 'og:locale:alternate', $locale);
+                $this->AppendTag($tags, 'og:locale:alternate', $locale);
         }
         else
-            $this->appendTag($tags, 'og:locale', $locales);
+            $this->AppendTag($tags, 'og:locale', $locales);
     }
 
-    protected function appendDefaultMetaTags(&$tags, DataObject $object)
+    protected function appendDefaultMetaTags(&$tags, $object)
     {
         /* @var $object IOGObjectExplicit */
-        $this->appendTag($tags, 'og:title', $object->getOGTitle());
-        $this->appendTag($tags, 'og:type', $object->getOGType());
-        $this->appendTag($tags, 'og:url', $object->AbsoluteLink());
+        $this->AppendTag($tags, 'og:title', $object->getOGTitle());
+        $this->AppendTag($tags, 'og:type', $object->getOGType());
+        $this->AppendTag($tags, 'og:url', $object->AbsoluteLink());
         $this->appendMediaMetaTags($tags, 'og:image', $object->OGImage());
 
         // Media fields
@@ -253,21 +247,27 @@ abstract class OpenGraphBuilder implements IOpenGraphObjectBuilder
         $this->appendMediaMetaTags($tags, 'og:video', $object->OGVideo());
 
         // Other optional fields
-        $this->appendTag($tags, 'og:description', $object->getOGDescription());
-        $this->appendTag($tags, 'og:determiner ', $object->getOGDeterminer());
-        $this->appendTag($tags, 'og:site_name', $object->getOGSiteName());
+        $this->AppendTag($tags, 'og:description', $object->getOGDescription());
+        $this->AppendTag($tags, 'og:determiner ', $object->getOGDeterminer());
+        $this->AppendTag($tags, 'og:site_name', $object->getOGSiteName());
         $this->appendLocales($tags, $object->getOGLocales());
+        
+        // Entrypoint for extensions to object tags
+        $this->extend('updateDefaultMetaTags', $tags, $object);
     }
 
-    protected function appendApplicationMetaTags(&$tags, SiteConfig $config)
+    protected function appendApplicationMetaTags(&$tags, $config)
     {
         /* @var $config IOGApplication */
-        $this->appendTag($tags, 'fb:admins', $config->getOGAdminID());
-        $this->appendTag($tags, 'fb:app_id', $config->getOGApplicationID());
+        $this->AppendTag($tags, 'fb:admins', $config->getOGAdminID());
+        $this->AppendTag($tags, 'fb:app_id', $config->getOGApplicationID());
         
         //optional OG fields from SiteConfig
-        $this->appendTag($tags, 'og:locality', $config->getOGlocality());
-        $this->appendTag($tags, 'og:country-name', $config->getOGcountryName());
+        $this->AppendTag($tags, 'og:locality', $config->getOGlocality());
+        $this->AppendTag($tags, 'og:country-name', $config->getOGcountryName());
+        
+        // Entrypoint for extensions to application tags
+        $this->extend('updateApplicationMetaTags', $tags, $config);
     }
 
     protected function appendDateTag(&$tags, $name, $date)
@@ -278,7 +278,7 @@ abstract class OpenGraphBuilder implements IOpenGraphObjectBuilder
         if (!($date instanceof DateTime))
             $date = new DateTime($date);
 
-        $this->appendTag($tags, $name, $date->format(DateTime::ISO8601));
+        $this->AppendTag($tags, $name, $date->format(DateTime::ISO8601));
     }
 
     public function BuildTags(&$tags, $object, $config)

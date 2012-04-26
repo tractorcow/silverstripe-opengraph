@@ -61,8 +61,7 @@ class OpenGraph
      */
     public static function set_application($applicationID = 'SiteConfig')
     {
-        $class = self::$siteconfig_extension_class;
-        $class::$application_id = $applicationID;
+        OpenGraphSiteConfigExtension::$application_id = $applicationID;
     }
     
     /**
@@ -73,7 +72,6 @@ class OpenGraph
      */
     public static function set_admin($adminID = 'SiteConfig')
     {
-        $class = self::$siteconfig_extension_class;
-        $class::$admin_id = $adminID;
+        OpenGraphSiteConfigExtension::$admin_id = $adminID;
     }
 }

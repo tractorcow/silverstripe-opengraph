@@ -2,8 +2,9 @@
 
 /**
  * Interface encompassing all optional and required fields for an opengraph object.
- * This interface is intended mostly be used as documentation for optional fields. Any fields in this can be
- * used in an {@see IOGObject} implementation also, but are not mandatory.
+ * This interface is intended mostly be used as documentation for optional fields.
+ * Any fields in this can be used in a class that implements only {@see IOGObject},
+ * but are not mandatory.
  * @author Damian Mooyman
  * @see IOGObject
  */
