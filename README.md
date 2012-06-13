@@ -44,7 +44,7 @@ should be used as a guide to what can be specified.
 For example, if you wanted to override the OGImage property (og:image meta tag) you would implement the
 following in your page classe:
 
-``php
+```php
 class MyPage extends Page
 {
     function OGImage()
