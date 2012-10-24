@@ -20,8 +20,8 @@ with Facebook.
 
 ## Requirements
 
- * SilverStripe 2.4.5, may work on lower versions or 3.0
- * PHP 5.2
+ * SilverStripe 3.0
+ * PHP 5.3
 
 ## Installation Instructions
 
