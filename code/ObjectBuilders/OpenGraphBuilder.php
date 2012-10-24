@@ -18,37 +18,6 @@ abstract class OpenGraphBuilder extends Object implements IOpenGraphObjectBuilde
         return $value instanceof IOGObject || $value instanceof SiteTree;
     }
 
-    protected function loadMimeTypes()
-    {
-        if ($this->mimeTypes)
-            return;
-
-        $mimePath = realpath(dirname(__FILE__) . '/../etc/mime.types');
-        if (!$mimePath || !@file_exists($mimePath))
-            return;
-
-        $mimeTypes = file($mimePath);
-        $mimeData = array();
-        foreach ($mimeTypes as $typeSpec)
-        {
-            if (!($typeSpec = trim($typeSpec)) || substr($typeSpec, 0, 1) == "#")
-                continue;
-
-            $parts = preg_split("/[ \t\r\n]+/", $typeSpec);
-            if (sizeof($parts) <= 1)
-                continue;
-
-            $mimeType = array_shift($parts);
-            foreach ($parts as $ext)
-            {
-                $ext = strtolower($ext);
-                $mimeData[$ext] = $mimeType;
-            }
-        }
-
-        $this->mimeTypes = $mimeData;
-    }
-
     /**
      * Provides better fallbackfor {@link HTTP::getMimeType}
      * @param string $file File name or path
@@ -56,20 +25,7 @@ abstract class OpenGraphBuilder extends Object implements IOpenGraphObjectBuilde
      */
     protected function getMimeType($file)
     {
-        // Check if this file has an extension
-        if (strstr($file, '.') === false)
-            return null;
-
-        // Use silverstripe mime mechanism
-        if ($type = HTTP::getMimeType($file))
-            return $type;
-
-        // Load our personal mime cache
-        $this->loadMimeTypes();
-
-        $extension = strtolower(substr($file, strrpos($file, '.') + 1));
-        if (isset($this->mimeTypes[$extension]))
-            return $this->mimeTypes[$extension];
+        return HTTP::get_mime_type($file);
     }
 
     public function AppendTag(&$tags, $name, $content)

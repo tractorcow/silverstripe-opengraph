@@ -1,17 +1,18 @@
 <?php
 
-class OpenGraphSiteConfigExtension extends DataObjectDecorator implements IOGApplication
+class OpenGraphSiteConfigExtension extends DataExtension implements IOGApplication
 {
     public static $application_id = 'SiteConfig';
     public static $admin_id = 'SiteConfig';
     public static $default_country = '';
     public static $allowed_countries = null;
-
-    public function extraStatics()
-    {
+	
+	public static function get_extra_config($class, $extensionClass, $args) {
+		
         $db = array();
         if (self::$application_id === 'SiteConfig')
             $db['OGApplicationID'] = 'Varchar(255)';
+		
         if (self::$admin_id === 'SiteConfig')
             $db['OGAdminID'] = 'Varchar(255)';
         
@@ -22,17 +23,21 @@ class OpenGraphSiteConfigExtension extends DataObjectDecorator implements IOGApp
             'db' => $db
         );
     }
-
-    public function updateCMSFields(FieldSet &$fields)
-    {
-        if (self::$application_id === 'SiteConfig')
+	
+	public function updateCMSFields(FieldList $fields) {
+		
+        if (self::$application_id === 'SiteConfig') {
             $fields->addFieldToTab('Root.Facebook', new TextField('OGApplicationID', 'FB Application ID', null, 255));
-        if (self::$admin_id === 'SiteConfig')
+		}
+		
+        if (self::$admin_id === 'SiteConfig') {
             $fields->addFieldToTab('Root.Facebook', new TextField('OGAdminID', 'FB Admin ID(s)', null, 255));
+		}
         
-        $fields->addFieldToTab('Root.OpenGraph', new TextField('OGlocality', 'Locality', null, 255));
-        $fields->addFieldToTab('Root.OpenGraph', new CountryDropdownField('OGcountry-name', 'Country', self::$allowed_countries, self::$default_country));
-        
+        $fields->addFieldsToTab('Root.OpenGraph', array(
+			new TextField('OGlocality', 'Locality', null, 255),
+			new CountryDropdownField('OGcountry-name', 'Country', self::$allowed_countries, self::$default_country)
+		));
     }
 
     public function getOGAdminID()

@@ -5,7 +5,7 @@
  *
  * @author Damian Mooyman
  */
-class OpenGraphPageExtension extends DataObjectDecorator implements IOGObjectExplicit
+class OpenGraphPageExtension extends SiteTreeExtension implements IOGObjectExplicit
 {
     public static $default_image = '/opengraph/images/logo.gif';
 
@@ -81,8 +81,7 @@ class OpenGraphPageExtension extends DataObjectDecorator implements IOGObjectExp
         foreach(OpenGraph::$object_types as $type => $details)
         {
             $interface = $details[0];
-            if ($this->owner instanceof $interface)
-                return $type;
+            if ($this->owner instanceof $interface) return $type;
         }
 
         return OGTypes::DefaultType;
