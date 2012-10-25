@@ -219,8 +219,8 @@ abstract class OpenGraphBuilder extends Object implements IOpenGraphObjectBuilde
         $this->AppendTag($tags, 'fb:app_id', $config->getOGApplicationID());
         
         //optional OG fields from SiteConfig
-        $this->AppendTag($tags, 'og:locality', $config->getOGlocality());
-        $this->AppendTag($tags, 'og:country-name', $config->getOGcountryName());
+        $this->AppendTag($tags, 'og:locality', $config->getOGLocality());
+        $this->AppendTag($tags, 'og:country-name', $config->getOGCountryName());
         
         // Entrypoint for extensions to application tags
         $this->extend('updateApplicationMetaTags', $tags, $config);

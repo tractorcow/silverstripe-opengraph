@@ -10,14 +10,22 @@ class OpenGraphSiteConfigExtension extends DataExtension implements IOGApplicati
 	public static function get_extra_config($class, $extensionClass, $args) {
 		
         $db = array();
-        if (self::$application_id === 'SiteConfig')
-            $db['OGApplicationID'] = 'Varchar(255)';
 		
-        if (self::$admin_id === 'SiteConfig')
+        if (OpenGraph::get_config('application_id') == 'SiteConfig') {
+            $db['OGApplicationID'] = 'Varchar(255)';
+		}
+		
+        if (OpenGraph::get_config('admin_id') == 'SiteConfig') {
             $db['OGAdminID'] = 'Varchar(255)';
+		}
         
-        $db['OGlocality'] = 'Varchar(255)';
-        $db['OGcountry-name'] = 'Varchar(255)';
+        if (OpenGraph::get_config('locality') == 'SiteConfig') {
+			$db['OGlocality'] = 'Varchar(255)';
+		}
+		
+        if (OpenGraph::get_config('country_name') == 'SiteConfig') {
+			$db['OGCountryName'] = 'Varchar(255)';
+		}
 
         return array(
             'db' => $db
@@ -26,42 +34,65 @@ class OpenGraphSiteConfigExtension extends DataExtension implements IOGApplicati
 	
 	public function updateCMSFields(FieldList $fields) {
 		
-        if (self::$application_id === 'SiteConfig') {
-            $fields->addFieldToTab('Root.Facebook', new TextField('OGApplicationID', 'FB Application ID', null, 255));
+        if (OpenGraph::get_config('application_id') == 'SiteConfig') {
+            $fields->addFieldToTab(
+				'Root.Facebook', 
+				new TextField('OGApplicationID', 'Facebook Application ID', null, 255)
+			);
 		}
 		
-        if (self::$admin_id === 'SiteConfig') {
-            $fields->addFieldToTab('Root.Facebook', new TextField('OGAdminID', 'FB Admin ID(s)', null, 255));
+        if (OpenGraph::get_config('admin_id') == 'SiteConfig') {
+            $fields->addFieldToTab(
+				'Root.Facebook',
+				new TextField('OGAdminID', 'Facebook Admin ID(s)', null, 255)
+			);
 		}
         
-        $fields->addFieldsToTab('Root.OpenGraph', array(
-			new TextField('OGlocality', 'Locality', null, 255),
-			new CountryDropdownField('OGcountry-name', 'Country', self::$allowed_countries, self::$default_country)
-		));
+        if (OpenGraph::get_config('locality') == 'SiteConfig') {
+			$fields->addFieldToTab(
+				'Root.Facebook', 
+				new TextField('OGlocality', 'Open Graph Locality', null, 255)
+			);
+		}
+		
+        if (OpenGraph::get_config('country_name') == 'SiteConfig') {
+			$fields->addFieldToTab('Root.Facebook',
+				new CountryDropdownField(
+					'OGCountryName', 
+					'Open Graph Country', 
+					self::$allowed_countries, 
+					self::$default_country
+				)
+			);
+		}
     }
+	
+	protected function getConfigurableField($dbField, $configField) {
+		$value = OpenGraph::get_config($configField);
+        if ($value == 'SiteConfig') {
+            return $this->owner->getField($dbField);
+		}
+        return $value;
+	}
 
     public function getOGAdminID()
     {
-        if (self::$admin_id === 'SiteConfig')
-            return $this->owner->getField('OGAdminID');
-        return self::$admin_id;
+		return $this->getConfigurableField('OGAdminID', 'admin_id');
     }
 
     public function getOGApplicationID()
     {
-        if (self::$application_id === 'SiteConfig')
-            return $this->owner->getField('OGApplicationID');
-        return self::$application_id;
+		return $this->getConfigurableField('OGApplicationID', 'application_id');
     }
     
-    public function getOGlocality()
+    public function getOGLocality()
     {
-        return $this->owner->getField('OGlocality');
+		return $this->getConfigurableField('OGLocality', 'locality');
     }
     
-    public function getOGcountryName()
+    public function getOGCountryName()
     {
-        return $this->owner->getField('OGcountry-name');
+		return $this->getConfigurableField('OGCountryName', 'country_name');
     }
 
 }

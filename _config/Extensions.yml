@@ -1,0 +1,9 @@
+---
+name: 'opengraphextensions'
+---
+Page:
+  extensions:
+    0: 'OpenGraphObjectExtension'
+SiteConfig:
+  extensions:
+    0: 'OpenGraphSiteConfigExtension'

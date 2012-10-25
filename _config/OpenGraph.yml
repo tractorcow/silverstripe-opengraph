@@ -2,6 +2,10 @@
 Name: opengraphobjecttypes
 ---
 OpenGraph:
+  application_id: 'SiteConfig'
+  admin_id: 'SiteConfig'
+  locality: 'SiteConfig'
+  country_name: 'SiteConfig'
   types:
     'music.song':
       interface: IOGMusicSong

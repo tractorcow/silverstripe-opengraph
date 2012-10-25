@@ -5,7 +5,7 @@
  *
  * @author Damian Mooyman
  */
-class OpenGraphPageExtension extends SiteTreeExtension implements IOGObjectExplicit
+class OpenGraphObjectExtension extends SiteTreeExtension implements IOGObjectExplicit
 {
     public static $default_image = '/opengraph/images/logo.gif';
 

@@ -1,15 +1,6 @@
 <?php
 
 class OpenGraph {
-	/**
-	 * Flag to indicate whether this module should attempt to automatically load itself
-	 * @var boolean
-	 */
-	public static $auto_load = true;
-
-	public static $page_extension_class = 'OpenGraphPageExtension';
-
-	public static $siteconfig_extension_class = 'OpenGraphSiteConfigExtension';
 
 	/**
 	 * Registers a new Opengraph object type
@@ -19,7 +10,7 @@ class OpenGraph {
 	 * and generates meta tags. Must implement {@link IOpenGraphObjectBuilder}
 	 */
 	public static function register_type($type, $requiredInterface, $tagBuilderClass) {
-		Config::inst()->update('OpenGraph', 'types', array(
+		self::set_config('types', array(
 			$type => array(
 				'interface' => $requiredInterface,
 				'tagbuilder' => $tagBuilderClass
@@ -33,8 +24,7 @@ class OpenGraph {
 	 * @return array Prototype in the form of as associative array with the keys "interface" and "tagbuilder"
 	 */
 	public static function get_prototype($type) {
-		$types = Config::inst()->get('OpenGraph', 'types');
-		Debug::dump($types); die;
+		$types = self::get_config('types');
 		if(isset($types[$type])) return $types[$type];
 	}
 
@@ -45,37 +35,47 @@ class OpenGraph {
 	 */
 	public static function get_object_type($object) {
 		
-		$types = Config::inst()->get('OpenGraph', 'types');
+		$types = self::get_config('types');
 		
 		foreach ($types as $type => $details) {
 			$interface = $details['interface'];
 			if ($object instanceof $interface) return $type;
 		}
 	}
-
-	public static function load() {
-		Object::add_extension('Page', self::$page_extension_class);
-		Object::add_extension('SiteConfig', self::$siteconfig_extension_class);
+	
+	/**
+	 * Retrieves the configured field, or "SiteConfig" if this should be
+	 * managed through the siteconfig instead of yaml configuration
+	 * @return string Value of the configured field
+	 */
+	public static function get_config($field) {
+		return Config::inst()->get('OpenGraph', $field);
 	}
 
 	/**
-	 * Configure the site to use an application ID. Specifying no $applicationID
-	 * will cause the app to be managed via a SiteConfig field
-	 * @param string $applicationID The appID for this site, or left blank if this should be
-	 * configured via the site config
+	 * Configure the site to use a specified value for a field. Specifying 'SiteConfig'
+	 * will cause the value for this field to be managed via the SiteConfig
+	 * @param string $field
+	 * @param string $value 
 	 */
-	public static function set_application($applicationID = 'SiteConfig') {
-		OpenGraphSiteConfigExtension::$application_id = $applicationID;
+	public static function set_config($field, $value = 'SiteConfig') {
+		Config::inst()->update('OpenGraph', $field, $value);
 	}
-
+	
 	/**
-	 * Configure the site to use an admin ID. Specifying no $adminID
-	 * will cause the app to be managed via a SiteConfig field
-	 * @param string $adminID The adminID(s) for this site, or left blank if this should be
-	 * configured via the site config
+	 * Sets the application ID of this site, or 'SiteConfig' to manage in CMS
+	 * @param string $value 
 	 */
-	public static function set_admin($adminID = 'SiteConfig') {
-		OpenGraphSiteConfigExtension::$admin_id = $adminID;
+	public static function set_application($value) {
+		self::set_config('application_id', $value);
+	}
+	
+	/**
+	 * Sets the admin ID of this site, or 'SiteConfig' to manage in CMS
+	 * @param string $value 
+	 */
+	public static function set_admin($value) {
+		self::set_config('admin_id', $value);
 	}
 
 }

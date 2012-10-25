@@ -30,6 +30,10 @@ with Facebook.
  * If you are working with video files, you might want to install <https://github.com/tractorcow/silverstripe-mediadata>
    alongside this to extract video dimension for opengraph tags.
 
+## Configuration
+
+ * TODO
+
 ## Implementing Open Graph object properties
 
 To get specific information on each of the fields an opengraph object can have, check
