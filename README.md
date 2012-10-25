@@ -26,6 +26,7 @@ with Facebook.
 ## Installation Instructions
 
  * Extract all files into the 'opengraph' folder under your Silverstripe root.
+ * Ensure the namespace is defined in your template with <html $OGNS>
  * If you are working with video files, you might want to install <https://github.com/tractorcow/silverstripe-mediadata>
    alongside this to extract video dimension for opengraph tags.
 
