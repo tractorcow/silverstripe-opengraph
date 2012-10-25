@@ -46,18 +46,14 @@ class OpenGraphPageExtension extends SiteTreeExtension implements IOGObjectExpli
     {
         // Determine type
         $type = $this->owner->getOGType();
-        if(empty($type))
-            return null;
+        if(empty($type)) return null;
         
         // Determine prototype specification for this object type
-        $types = OpenGraph::$object_types;
-        if(!isset($types[$type]))
-            return null;
-        $prototype = OpenGraph::$object_types[$type];
-        
-        // Build tag builder for this prototype
-        $builderClass = $prototype[1];
-        return new $builderClass();
+		if($prototype = OpenGraph::get_prototype($type)) {
+			// Build tag builder for this prototype
+			$builderClass = $prototype['tagbuilder'];
+			return new $builderClass();
+		}
     }
 
     public function MetaTags(&$tags)
@@ -78,11 +74,7 @@ class OpenGraphPageExtension extends SiteTreeExtension implements IOGObjectExpli
      */
     public function getOGType()
     {
-        foreach(OpenGraph::$object_types as $type => $details)
-        {
-            $interface = $details[0];
-            if ($this->owner instanceof $interface) return $type;
-        }
+		if($type = OpenGraph::get_object_type($this->owner)) return $type;
 
         return OGTypes::DefaultType;
     }
