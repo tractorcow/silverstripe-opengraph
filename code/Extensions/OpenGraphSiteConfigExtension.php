@@ -2,8 +2,6 @@
 
 class OpenGraphSiteConfigExtension extends DataExtension implements IOGApplication
 {
-    public static $application_id = 'SiteConfig';
-    public static $admin_id = 'SiteConfig';
     public static $default_country = '';
     public static $allowed_countries = null;
 	
@@ -20,7 +18,7 @@ class OpenGraphSiteConfigExtension extends DataExtension implements IOGApplicati
 		}
         
         if (OpenGraph::get_config('locality') == 'SiteConfig') {
-			$db['OGlocality'] = 'Varchar(255)';
+			$db['OGLocality'] = 'Varchar(255)';
 		}
 		
         if (OpenGraph::get_config('country_name') == 'SiteConfig') {
@@ -51,7 +49,7 @@ class OpenGraphSiteConfigExtension extends DataExtension implements IOGApplicati
         if (OpenGraph::get_config('locality') == 'SiteConfig') {
 			$fields->addFieldToTab(
 				'Root.Facebook', 
-				new TextField('OGlocality', 'Open Graph Locality', null, 255)
+				new TextField('OGLocality', 'Open Graph Locality', null, 255)
 			);
 		}
 		
