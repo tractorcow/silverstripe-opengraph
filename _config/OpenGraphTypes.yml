@@ -1,0 +1,43 @@
+---
+# Opengraph object types.
+# This list may be added to to create new object types
+Name: opengraphobjecttypes
+---
+OpenGraph:
+  types:
+    'music.song':
+      interface: IOGMusicSong
+      tagbuilder: OGMusicSong
+    'music.album':
+      interface: IOGMusicAlbum
+      tagbuilder: OGMusicAlbum
+    'music.playlist':
+      interface: IOGMusicPlaylist
+      tagbuilder: OGMusicPlaylist
+    'music.radio_station':
+      interface: IOGMusicRadioStation
+      tagbuilder: OGMusicRadioStation
+    'video.movie':
+      interface: IOGVideoMovie
+      tagbuilder: OGVideoMovie
+    'video.episode':
+      interface: IOGVideoEpisode
+      tagbuilder: OGVideoEpisode
+    'video.tv_show':
+      interface: IOGVideoTVShow
+      tagbuilder: OGVideoTVShow
+    'video.other':
+      interface: IOGVideoOther
+      tagbuilder: OGVideoOther
+    'article':
+      interface: IOGArticle
+      tagbuilder: OGArticle
+    'book':
+      interface: IOGBook
+      tagbuilder: OGBook
+    'profile':
+      interface: IOGProfile
+      tagbuilder: OGProfile
+    'website':
+      interface: IOGWebsite
+      tagbuilder: OGWebsite

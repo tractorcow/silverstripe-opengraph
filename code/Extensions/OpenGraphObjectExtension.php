@@ -46,14 +46,19 @@ class OpenGraphObjectExtension extends SiteTreeExtension implements IOGObjectExp
     {
         // Determine type
         $type = $this->owner->getOGType();
+		
+		// Case for non-types
         if(empty($type)) return null;
-        
-        // Determine prototype specification for this object type
-		if($prototype = OpenGraph::get_prototype($type)) {
-			// Build tag builder for this prototype
-			$builderClass = $prototype['tagbuilder'];
-			return new $builderClass();
-		}
+		
+		// Determine type, if configured
+		$prototype = OpenGraph::get_prototype($type);
+		if(!empty($prototype['tagbuilder']))
+			$class = $prototype['tagbuilder'];
+		else 
+			$class = OpenGraph::get_default_tagbuilder();
+		
+		// Construct instance from type
+		return new $class();
     }
 
     public function MetaTags(&$tags)
@@ -93,7 +98,7 @@ class OpenGraphObjectExtension extends SiteTreeExtension implements IOGObjectExp
         return $config->Title;
     }
 
-    public function OGImage()
+    public function getOGImage()
     {
         // Since og:image is a required property, provide a reasonable default
         if (self::$default_image)
@@ -105,12 +110,12 @@ class OpenGraphObjectExtension extends SiteTreeExtension implements IOGObjectExp
         // Left blank by default. Implement this in the decorated class to determine correct value
     }
 
-    public function OGAudio()
+    public function getOGAudio()
     {
         // No audio by default
     }
 
-    public function OGVideo()
+    public function getOGVideo()
     {
         // No video by default
     }
@@ -130,7 +135,14 @@ class OpenGraphObjectExtension extends SiteTreeExtension implements IOGObjectExp
 
     public function getOGLocales()
     {
-        return i18n::get_locale();
+		// Use current locale
+        $locale = i18n::get_locale();
+		
+		// Check locale is valid
+		if(OpenGraph::is_locale_valid($locale)) return $locale;
+		
+		// Return default
+		return OpenGraph::get_default_locale();
     }
 
 }

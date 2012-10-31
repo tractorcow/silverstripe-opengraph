@@ -28,5 +28,5 @@ interface IOGObjectRequired extends IOGObject
      * Determines the image(s) to use for this object
      * @return Image[]|Image|string[]|string The image(s) or url(s) to image(s)
      */
-    function OGImage();
+    function getOGImage();
 }

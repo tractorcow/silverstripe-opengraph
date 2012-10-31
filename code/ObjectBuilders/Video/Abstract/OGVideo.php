@@ -28,7 +28,7 @@ abstract class OGVideo extends OpenGraphBuilder
         // Handle explicit song/album mapping object
         if ($value instanceof IOGVideoActor) /* @var $value IOGVideoActor */
         {
-            $this->appendRelatedActorList($tags, $namespace, $value->OGActor());
+            $this->appendRelatedActorList($tags, $namespace, $value->getOGActor());
             $this->AppendTag($tags, "$namespace:role", $value->getOGRole());
             return;
         }
@@ -47,9 +47,9 @@ abstract class OGVideo extends OpenGraphBuilder
     
     protected function appendVideoTags(&$tags, IOGVideo $video)
     {
-        $this->appendRelatedActorList($tags, 'video:actor', $video->OGVideoActors());
-        $this->appendRelatedProfileTags($tags, 'video:director', $video->OGVideoDirectors());
-        $this->appendRelatedProfileTags($tags, 'video:writer', $video->OGVideoWriters());
+        $this->appendRelatedActorList($tags, 'video:actor', $video->getOGVideoActors());
+        $this->appendRelatedProfileTags($tags, 'video:director', $video->getOGVideoDirectors());
+        $this->appendRelatedProfileTags($tags, 'video:writer', $video->getOGVideoWriters());
         $this->AppendTag($tags, 'video:duration', $video->getOGVideoDuration());
         $this->appendDateTag($tags, 'video:release_date', $video->getOGVideoReleaseDate());
         $this->appendRelatedTags($tags, 'video:tag', $video->getOGTags());

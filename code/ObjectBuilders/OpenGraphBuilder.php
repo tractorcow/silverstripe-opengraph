@@ -3,7 +3,7 @@
 /**
  * @author Damian Mooyman
  */
-abstract class OpenGraphBuilder extends Object implements IOpenGraphObjectBuilder
+class OpenGraphBuilder extends Object implements IOpenGraphObjectBuilder
 {
 
     protected $mimeTypes = null;
@@ -47,7 +47,7 @@ abstract class OpenGraphBuilder extends Object implements IOpenGraphObjectBuilde
 
         // check tag type
         if (is_scalar($content))
-            return $tags .= sprintf("<meta name=\"%s\" content=\"%s\" />\n", Convert::raw2att($name),
+            return $tags .= sprintf("<meta property=\"%s\" content=\"%s\" />\n", Convert::raw2att($name),
                     Convert::raw2att($content));
 
         trigger_error('Invalid tag type: ' . gettype($content), E_USER_ERROR);
@@ -196,11 +196,11 @@ abstract class OpenGraphBuilder extends Object implements IOpenGraphObjectBuilde
         $this->AppendTag($tags, 'og:title', $object->getOGTitle());
         $this->AppendTag($tags, 'og:type', $object->getOGType());
         $this->AppendTag($tags, 'og:url', $object->AbsoluteLink());
-        $this->appendMediaMetaTags($tags, 'og:image', $object->OGImage());
+        $this->appendMediaMetaTags($tags, 'og:image', $object->getOGImage());
 
         // Media fields
-        $this->appendMediaMetaTags($tags, 'og:audio', $object->OGAudio());
-        $this->appendMediaMetaTags($tags, 'og:video', $object->OGVideo());
+        $this->appendMediaMetaTags($tags, 'og:audio', $object->getOGAudio());
+        $this->appendMediaMetaTags($tags, 'og:video', $object->getOGVideo());
 
         // Other optional fields
         $this->AppendTag($tags, 'og:description', $object->getOGDescription());

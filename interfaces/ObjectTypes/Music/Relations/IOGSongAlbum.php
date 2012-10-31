@@ -9,13 +9,13 @@ interface IOGSongAlbum
      * The song
      * @return IOGMusicSong|string Song or url to song
      */
-    function OGSong();
+    function getOGSong();
     
     /**
      * The album
      * @return IOGMusicAlbum|string Album or url to album
      */
-    function OGAlbum();
+    function getOGAlbum();
     
     /**
      * The disc number where this song appears on this album

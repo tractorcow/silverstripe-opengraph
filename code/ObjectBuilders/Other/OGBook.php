@@ -5,7 +5,7 @@ class OGBook extends OpenGraphBuilder
 
     protected function appendBookTags(&$tags, IOGBook $book)
     {
-        $this->appendRelatedProfileTags($tags, 'book:author', $book->OGAuthors());
+        $this->appendRelatedProfileTags($tags, 'book:author', $book->getOGAuthors());
         $this->AppendTag($tags, 'book:isbn', $book->getOGBookISBN());
         $this->appendDateTag($tags, 'book:release_date', $book->getOGBookReleaseDate());
         $this->appendRelatedTags($tags, 'book:tag', $book->getOGTags());

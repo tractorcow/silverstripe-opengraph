@@ -16,11 +16,11 @@ interface IOGMusicSong extends IOGMusic {
      * @return IOGSongAlbum[]|IOGSongAlbum|IOGMusicAlbum[]|IOGMusicAlbum|string[]|string Album(s) related to this 
      * song or url(s) to album(s)
      */
-    function OGMusicAlbums();
+    function getOGMusicAlbums();
     
     /**
      * The musician(s) who composed this object
      * @return IOGProfile[]|IOGProfile|string[]|string Musican profile(s) or url(s) to profile(s)
      */
-    function OGMusicMusicians();
+    function getOGMusicMusicians();
 }

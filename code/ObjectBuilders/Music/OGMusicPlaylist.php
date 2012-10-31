@@ -4,8 +4,8 @@ class OGMusicPlaylist extends OGMusic
 {
     protected function appendPlaylistTags(&$tags, IOGMusicPlaylist $playlist)
     {
-        $this->appendRelatedSongList($tags, 'music:song', $playlist->OGMusicSongs());
-        $this->appendRelatedProfileTags($tags, 'music:creator', $playlist->OGMusicCreators());
+        $this->appendRelatedSongList($tags, 'music:song', $playlist->getOGMusicSongs());
+        $this->appendRelatedProfileTags($tags, 'music:creator', $playlist->getOGMusicCreators());
     }
 
     public function BuildTags(&$tags, $object, $config)

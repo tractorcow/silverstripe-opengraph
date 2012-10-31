@@ -4,7 +4,7 @@ class OGMusicRadioStation extends OGMusic
 {
     protected function appendRadioStationTags(&$tags, IOGMusicRadioStation $station)
     {
-        $this->appendRelatedProfileTags($tags, 'music:creator', $station->OGMusicCreators());
+        $this->appendRelatedProfileTags($tags, 'music:creator', $station->getOGMusicCreators());
     }
 
     public function BuildTags(&$tags, $object, $config)

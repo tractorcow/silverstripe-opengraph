@@ -25,7 +25,7 @@ class OGMusicSong extends OGMusic
         if ($value instanceof IOGSongAlbum)
         {
             /* @var $value IOGSongAlbum */
-            $this->appendRelatedAlbumList($tags, $namespace, $value->OGAlbum());
+            $this->appendRelatedAlbumList($tags, $namespace, $value->getOGAlbum());
             $this->AppendTag($tags, "$namespace:disc", $value->getOGDisc());
             $this->AppendTag($tags, "$namespace:track", $value->getOGTrack());
             return;
@@ -45,8 +45,8 @@ class OGMusicSong extends OGMusic
     protected function appendSongTags(&$tags, IOGMusicSong $song)
     {
         $this->AppendTag($tags, 'music:duration', $song->getOGMusicDuration());
-        $this->appendRelatedProfileTags($tags, 'music:musician', $song->OGMusicMusicians());
-        $this->appendRelatedAlbumList($tags, 'music:album', $song->OGMusicAlbums());
+        $this->appendRelatedProfileTags($tags, 'music:musician', $song->getOGMusicMusicians());
+        $this->appendRelatedAlbumList($tags, 'music:album', $song->getOGMusicAlbums());
     }
 
     public function BuildTags(&$tags, $object, $config)

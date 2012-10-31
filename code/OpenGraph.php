@@ -1,18 +1,22 @@
 <?php
 
+/**
+ * Simple wrapper for opengraph settings
+ */
 class OpenGraph {
 
 	/**
 	 * Registers a new Opengraph object type
 	 * @param string $type The value of the og:type property
-	 * @param string $requiredInterface The name of the interface required for objects. Must extend {@link IOGObject}
+	 * @param string $identifyingInterface The name of the interface required to identify objects. Must extend {@link IOGObject}
 	 * @param string $tagBuilderClass The class name which takes an object implementing the $requiredInterface interface
-	 * and generates meta tags. Must implement {@link IOpenGraphObjectBuilder}
+	 * and generates meta tags. Must implement {@link IOpenGraphObjectBuilder}. The default builder will be used if none
+	 * is given
 	 */
-	public static function register_type($type, $requiredInterface, $tagBuilderClass) {
+	public static function register_type($type, $identifyingInterface, $tagBuilderClass = null) {
 		self::set_config('types', array(
 			$type => array(
-				'interface' => $requiredInterface,
+				'interface' => $identifyingInterface,
 				'tagbuilder' => $tagBuilderClass
 			)
 		));
@@ -76,6 +80,36 @@ class OpenGraph {
 	 */
 	public static function set_admin($value) {
 		self::set_config('admin_id', $value);
+	}
+	
+	/**
+	 * Retrieves the default class used to build tags
+	 * @return type 
+	 */
+	public static function get_default_tagbuilder() {
+		return self::get_config('default_tagbuilder');
+	}
+	
+	/**
+	 * Retrieves the list of all allowed opengraph locales
+	 * @return array Associative array of locale to name. E.g. en_UK => 'English (UK)'
+	 */
+	public static function get_locales() {
+		return self::get_config('locales');
+	}
+	
+	public static function get_default_locale() {
+		return self::get_config('default_locale');
+	}
+	
+	/**
+	 * Check if a given locale is valid
+	 * @param string $locale Locale to test in en_NZ format
+	 * @return boolean
+	 */
+	public static function is_locale_valid($locale) {
+		$locales = self::get_locales();
+		return isset($locales[$locale]);
 	}
 
 }

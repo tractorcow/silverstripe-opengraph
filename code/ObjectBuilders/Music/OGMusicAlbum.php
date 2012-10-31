@@ -4,8 +4,8 @@ class OGMusicAlbum extends OGMusic
 {
     protected function appendAlbumTags(&$tags, IOGMusicAlbum $album)
     {
-        $this->appendRelatedSongList($tags, 'music:song', $album->OGMusicSongs());
-        $this->appendRelatedProfileTags($tags, 'music:musician', $album->OGMusicMusicians());
+        $this->appendRelatedSongList($tags, 'music:song', $album->getOGMusicSongs());
+        $this->appendRelatedProfileTags($tags, 'music:musician', $album->getOGMusicMusicians());
         $this->appendDateTag($tags, 'music:release_date', $album->getOGMusicReleaseDate());
     }
 

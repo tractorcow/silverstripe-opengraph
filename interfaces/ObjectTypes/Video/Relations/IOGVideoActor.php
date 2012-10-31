@@ -17,11 +17,11 @@ interface IOGVideoActor
      * The video
      * @return IOGVideo|string The video object or url to video
      */
-    function OGVideo();
+    function getOGVideo();
     
     /**
      * The profile of the actor
      * @return IOGProfile|string The profile object or url to profile
      */
-    function OGActor();
+    function getOGActor();
 }
