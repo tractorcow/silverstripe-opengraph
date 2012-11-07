@@ -4,7 +4,5 @@ Name: opengraphsettings
 OpenGraph:
   application_id: 'SiteConfig'
   admin_id: 'SiteConfig'
-  locality: 'SiteConfig'
-  country_name: 'SiteConfig'
   default_locale: 'en_US'
   default_tagbuilder: 'OpenGraphBuilder'

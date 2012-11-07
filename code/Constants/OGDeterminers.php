@@ -10,5 +10,6 @@ class OGDeterminers
     const Auto = 'auto';
     const Blank = '';
     
-    const DefaultValue = self::Auto;
+    const DefaultValue = null; // Generally og:determiner causes validation
+	// errors, so do not enable unless explicitly set in an application
 }

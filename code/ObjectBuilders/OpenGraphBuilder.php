@@ -218,10 +218,6 @@ class OpenGraphBuilder extends Object implements IOpenGraphObjectBuilder
         $this->AppendTag($tags, 'fb:admins', $config->getOGAdminID());
         $this->AppendTag($tags, 'fb:app_id', $config->getOGApplicationID());
         
-        //optional OG fields from SiteConfig
-        $this->AppendTag($tags, 'og:locality', $config->getOGLocality());
-        $this->AppendTag($tags, 'og:country-name', $config->getOGCountryName());
-        
         // Entrypoint for extensions to application tags
         $this->extend('updateApplicationMetaTags', $tags, $config);
     }
