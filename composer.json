@@ -1,5 +1,5 @@
 {
-    "name": "tractorcow/opengraph",
+    "name": "tractorcow/silverstripe-opengraph",
     "description": "Implementation of the Facebook Opengraph protocol for Silverstripe",
     "type": "silverstripe-module",
     "keywords": ["silverstripe", "facebook", "opengraph"],
@@ -9,8 +9,14 @@
             "email": "damian.mooyman@gmail.com"
         }
     ],
+    "support": {
+        "issues": "http://github.com/tractorcow/silverstripe-opengraph/issues"
+    },
     "require": {	
 		"silverstripe/framework": "3.*",
 		"composer/installers": "*"
+    },
+    "extra": {
+        "installer-name": "opengraph"
     }
 }
