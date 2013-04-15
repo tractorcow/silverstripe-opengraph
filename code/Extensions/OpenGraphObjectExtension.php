@@ -122,6 +122,12 @@ class OpenGraphObjectExtension extends SiteTreeExtension implements IOGObjectExp
 
     public function getOGDescription()
     {
+		// Check MetaDescription has given content
+		if($this->owner->hasField('MetaDescription')) {
+			$description = trim($this->owner->MetaDescription);
+			if(!empty($description)) return $description;
+		}
+		
         // Intelligent fallback for SiteTree instances
         $contentField = $this->owner->dbObject('Content');
         if ($contentField instanceof Text) {
