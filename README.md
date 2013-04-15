@@ -78,6 +78,14 @@ If you wish to add a new og:type you will need to:
 OpenGraph::register_type('type-name', IOGMyObjectInterface, MyObjectTagBuilder);
 ```
 
+```yaml
+OpenGraph:
+  types:
+    'type-name':
+      interface: IOGMyObjectInterface
+      tagbuilder: MyObjectTagBuilder
+```
+
 ## Adding tags to the default type
 
 You can decorate the OpenGraphBuilder object instead of extending it if you need
@@ -87,7 +95,7 @@ The example below shows how to add extra fields from the Page and SiteConfig
 to the set of opengraph tags.
 
 ```php
-Object::add_extension('OpenGraphBuilder', 'OpengraphBuilderExtension');
+OpenGraphBuilder::add_extension('OpengraphBuilderExtension');
 
 class OpengraphBuilderExtension extends Extension
 {
