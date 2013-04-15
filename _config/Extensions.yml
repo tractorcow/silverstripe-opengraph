@@ -3,7 +3,7 @@ name: 'opengraphextensions'
 ---
 Page:
   extensions:
-    0: 'OpenGraphObjectExtension'
+    - 'OpenGraphObjectExtension'
 SiteConfig:
   extensions:
-    0: 'OpenGraphSiteConfigExtension'
+    - 'OpenGraphSiteConfigExtension'
