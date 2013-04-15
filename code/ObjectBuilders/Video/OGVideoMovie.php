@@ -5,5 +5,5 @@
  */
 class OGVideoMovie extends OGVideo
 {
-    
+	
 }

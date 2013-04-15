@@ -7,10 +7,10 @@
  */
 interface IOGObject
 {
-    
-    /**
-     * URI to this object
-     * Named as below to prevent having to wrap the {@link SiteTree::AbsoluteLink} method explicitly
-     */
-    function AbsoluteLink();
+	
+	/**
+	 * URI to this object
+	 * Named as below to prevent having to wrap the {@link SiteTree::AbsoluteLink} method explicitly
+	 */
+	function AbsoluteLink();
 }

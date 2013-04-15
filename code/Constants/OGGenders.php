@@ -7,6 +7,6 @@
  */
 class OGGenders
 {
-    const Male = 'male';
-    const Female = 'female';
+	const Male = 'male';
+	const Female = 'female';
 }

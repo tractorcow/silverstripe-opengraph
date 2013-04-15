@@ -5,5 +5,5 @@
  */
 interface IOGVideoOther extends IOGVideo
 {
-    
+	
 }

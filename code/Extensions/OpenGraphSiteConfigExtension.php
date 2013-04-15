@@ -4,53 +4,53 @@ class OpenGraphSiteConfigExtension extends DataExtension implements IOGApplicati
 {	
 	public static function get_extra_config($class, $extensionClass, $args) {
 		
-        $db = array();
+		$db = array();
 		
-        if (OpenGraph::get_config('application_id') == 'SiteConfig') {
-            $db['OGApplicationID'] = 'Varchar(255)';
+		if (OpenGraph::get_config('application_id') == 'SiteConfig') {
+			$db['OGApplicationID'] = 'Varchar(255)';
 		}
 		
-        if (OpenGraph::get_config('admin_id') == 'SiteConfig') {
-            $db['OGAdminID'] = 'Varchar(255)';
+		if (OpenGraph::get_config('admin_id') == 'SiteConfig') {
+			$db['OGAdminID'] = 'Varchar(255)';
 		}
 		
-        return array(
-            'db' => $db
-        );
-    }
+		return array(
+			'db' => $db
+		);
+	}
 	
 	public function updateCMSFields(FieldList $fields) {
 		
-        if (OpenGraph::get_config('application_id') == 'SiteConfig') {
-            $fields->addFieldToTab(
+		if (OpenGraph::get_config('application_id') == 'SiteConfig') {
+			$fields->addFieldToTab(
 				'Root.Facebook', 
 				new TextField('OGApplicationID', 'Facebook Application ID', null, 255)
 			);
 		}
 		
-        if (OpenGraph::get_config('admin_id') == 'SiteConfig') {
-            $fields->addFieldToTab(
+		if (OpenGraph::get_config('admin_id') == 'SiteConfig') {
+			$fields->addFieldToTab(
 				'Root.Facebook',
 				new TextField('OGAdminID', 'Facebook Admin ID(s)', null, 255)
 			);
 		}
-    }
+	}
 	
 	protected function getConfigurableField($dbField, $configField) {
 		$value = OpenGraph::get_config($configField);
-        if ($value == 'SiteConfig') {
-            return $this->owner->getField($dbField);
+		if ($value == 'SiteConfig') {
+			return $this->owner->getField($dbField);
 		}
-        return $value;
+		return $value;
 	}
 
-    public function getOGAdminID()
-    {
+	public function getOGAdminID()
+	{
 		return $this->getConfigurableField('OGAdminID', 'admin_id');
-    }
+	}
 
-    public function getOGApplicationID()
-    {
+	public function getOGApplicationID()
+	{
 		return $this->getConfigurableField('OGApplicationID', 'application_id');
-    }
+	}
 }

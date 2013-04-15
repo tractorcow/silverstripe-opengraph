@@ -7,7 +7,7 @@
  */
 interface IMediaFile
 {
-    function getWidth();
-    function getHeight();
-    function getAbsoluteURL();
+	function getWidth();
+	function getHeight();
+	function getAbsoluteURL();
 }
