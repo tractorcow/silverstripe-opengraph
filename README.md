@@ -37,7 +37,7 @@ composer require "tractorcow/silverstripe-opengraph": "3.1.*@dev"
 
 The main configuration options for this module can be found in [OpenGraph.yml](_config/OpenGraph.yml).
 
-Override these in your own `mysite/_config/OpenGraph.yaml` or `mysite/_config.php`
+Override these in your own `mysite/_config/OpenGraph.yml` or `mysite/_config.php`
 
 ```yaml
 ---
@@ -64,7 +64,7 @@ OpenGraph:
 
 To get specific information on each of the fields an opengraph object can have, check
 out the various implementations of each in the [interfaces/ObjectTypes](interfaces/ObjectTypes) folder,
-or in the [_config/OpenGraphTypes.yaml](_config/OpenGraphTypes.yaml) file for the list of
+or in the [_config/OpenGraphTypes.yml](_config/OpenGraphTypes.yml) file for the list of
 types and their respective interfaces.
 
 The basic opengraph object has a set of required properties (as defined by IOGObjectRequired)
