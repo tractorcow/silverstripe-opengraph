@@ -3,6 +3,7 @@
 	"description": "Implementation of the Facebook Opengraph protocol for Silverstripe",
 	"type": "silverstripe-module",
 	"keywords": ["silverstripe", "facebook", "opengraph"],
+	"license": "BSD-3-Clause",
 	"authors": [
 		{
 			"name": "Damian Mooyman",

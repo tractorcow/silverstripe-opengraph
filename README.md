@@ -14,10 +14,6 @@ with Facebook.
 
  * Damian Mooyman - <https://github.com/tractorcow/silverstripe-opengraph>
 
-## License
-
- * TODO
-
 ## Requirements
 
  * SilverStripe 3.1
@@ -25,7 +21,12 @@ with Facebook.
 
 ## Installation Instructions
 
- * Extract all files into the 'opengraph' folder under your Silverstripe root.
+ * Extract all files into the 'opengraph' folder under your Silverstripe root, or install using composer
+
+```bash
+composer require "tractorcow/silverstripe-opengraph": "3.1.*@dev"
+```
+
  * Ensure the namespace is defined in your template with ``` <html $OGNS> ```
  * If you need to add a prefix attribute to the ``` <head /> ``` tag then you should do this directly
    in your template.
@@ -34,12 +35,37 @@ with Facebook.
 
 ## Configuration
 
- * TODO
+The main configuration options for this module can be found in [OpenGraph.yml](_config/OpenGraph.yml).
 
-## Implementing Open Graph object properties
+Override these in your own `mysite/_config/OpenGraph.yaml` or `mysite/_config.php`
+
+```yaml
+---
+Name: myopengraphsettings
+After: '#opengraphsettings'
+---
+OpenGraph:
+  application_id: 'SiteConfig'
+  admin_id: 'SiteConfig'
+  default_locale: 'en_US'
+  default_tagbuilder: 'OpenGraphBuilder'
+
+```
+
+* Set application_id to either `SiteConfig` (to be set in the CMS) or a literal facebook app id
+* Set admin_id to either `SiteConfig` (to be set in the CMS) or a literal facebook admin_id
+* The default_locale is the literal value to use as the locale tag (if i18n doesn't have a locale set)
+* The default_tagbuilder is the name of the class to use to generate tags (unless a type has one
+  specified explicitly). See below under [Adding new types][#adding-new-types] for details.
+
+## How to do stuff
+
+### Implementing Open Graph object properties
 
 To get specific information on each of the fields an opengraph object can have, check
-out the various implementations of each in the /interfaces/ObjectTypes folder.
+out the various implementations of each in the [interfaces/ObjectTypes](interfaces/ObjectTypes) folder,
+or in the [_config/OpenGraphTypes.yaml](_config/OpenGraphTypes.yaml) file for the list of
+types and their respective interfaces.
 
 The basic opengraph object has a set of required properties (as defined by IOGObjectRequired)
 and additionally a set of optional properties (as defined by IOGObjectExplicit).
@@ -52,19 +78,19 @@ For example, if you wanted to override the getOGImage property (og:image meta ta
 following in your page classe:
 
 ```php
-class MyPage extends Page
-{
-    function getOGImage()
-    {
+class MyPage extends Page {
+
+    function getOGImage() {
         return $this->Thumbnail();
     }
+
 }
 ```
 
 By implementing these properties explicitly in your page classes, you can override the default properties
 defined in the OpenGraphPageExtension.
 
-## Adding new types
+### Adding new types
 
 If you wish to add a new og:type you will need to:
  * Create an interface that extends IOGObject that defines the fields (if any)
@@ -86,7 +112,39 @@ OpenGraph:
       tagbuilder: MyObjectTagBuilder
 ```
 
-## Adding tags to the default type
+### Creating a custom tag builder
+
+In order to add an opengraph meta tag to your page, you need to write the code that
+describes how to translate an object into a piece of html. This can be done by
+implementing this in PHP with a `TagBuilder` object.
+
+Note that there are two objects for every request; The entity being viewed (Page or DataObject)
+and the application (SiteConfig). Each has their own set of tags.
+
+E.g.
+
+```php
+class MyObjectTagBuilder extends OpenGraphBuilder {
+
+    public function BuildTags(&$tags, $object, $config) {
+        parent::BuildTags($tags, $object, $config);
+
+        $this->appendTag($tags, 'appnamespace:nameofthetag', $object->getOGNameOfTheTag());
+    }
+}
+```
+
+Our interface might look something like
+
+```php
+interface IOGMyObjectInterface extends IOGObject {
+	
+	function getOGNameOfTheTag();
+}
+
+```
+
+### Adding tags to the default type
 
 You can decorate the OpenGraphBuilder object instead of extending it if you need
 to add additional tags to all object types.
@@ -97,23 +155,76 @@ to the set of opengraph tags.
 ```php
 OpenGraphBuilder::add_extension('OpengraphBuilderExtension');
 
-class OpengraphBuilderExtension extends Extension
-{
-    function updateApplicationMetaTags(&$tags, $siteconfig)
-    {
+class OpengraphBuilderExtension extends Extension {
+
+    function updateApplicationMetaTags(&$tags, $siteconfig) {
         $this->owner->AppendTag($tags, 'og:application-name', $siteconfig->Title);
     }
     
-    function updateDefaultMetaTags(&$tags, $page)
-    {
+    function updateDefaultMetaTags(&$tags, $page) {
         $this->owner->AppendTag($tags, 'og:page-menu-name', $page->MenuTitle);
     }
+
 }
 ```
+
+### Disabling opengraph for a single page (or page type)
+
+If you need to disable opengraph for any page then a null value for `getOGType()`
+will disable tag generation.
+
+```php
+NonOGPage extends Page {
+
+    function getOGType() {
+        return null;
+    }
+
+}
+```
+
+### Using DataObjects as pages
+
+See [https://github.com/tractorcow/silverstripe-opengraph/wiki/Using-DataObjects-as-Pages](https://github.com/tractorcow/silverstripe-opengraph/wiki/Using-DataObjects-as-Pages)
+for how to extend your `DataObject` with `OpenGraphObjectExtension`.
+
+ * Add the `OpenGraphObjectExtension` extension to your object
+ * Implement `AbsoluteLink` on your object
+ * Implement `MetaTags` on your object, making sure to call `$this->extend('MetaTags', $tags);`
+ * Make sure the actual page type being viewed delegates the meta tag generation to your dataobject
 
 ## Need more help?
 
 Message or email me at damian.mooyman@gmail.com or, well, read the code!
+
+## License
+
+Copyright (c) 2013, Damian Mooyman
+All rights reserved.
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+ * Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+ * Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+ * The name of Damian Mooyman may not be used to endorse or promote products
+   derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## Apologies
 
