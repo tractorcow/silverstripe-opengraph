@@ -104,6 +104,8 @@ If you wish to add a new og:type you will need to:
 OpenGraph::register_type('type-name', IOGMyObjectInterface, MyObjectTagBuilder);
 ```
 
+Or better still, do this directly in yaml as below
+
 ```yaml
 OpenGraph:
   types:
