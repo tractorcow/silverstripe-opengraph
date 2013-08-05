@@ -10,7 +10,7 @@ class OpenGraphBuilder extends Object implements IOpenGraphObjectBuilder
 
 	protected function isValueIterable($value)
 	{
-		return is_array($value) || $value instanceof DataObjectSet;
+		return is_array($value) || $value instanceof SS_List;
 	}
 	
 	protected function isValueLinkable($value)
