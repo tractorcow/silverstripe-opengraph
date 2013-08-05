@@ -104,8 +104,9 @@ class OpenGraphBuilder extends Object implements IOpenGraphObjectBuilder
 	 * @param string $namespace The namespace to use for this element
 	 * @param IMediaFile[]|IMediaFile|File[]|File|string[]|string $value Either an File object, string to the (non https) image url, or a list of the former
 	 * @param string $https The HTTPS url if available
+	 * @param string $mimeType type to use, or null to auto detect
 	 */
-	protected function appendMediaMetaTags(&$tags, $namespace, $value, $https = null)
+	protected function appendMediaMetaTags(&$tags, $namespace, $value, $https = null, $mimeType = null)
 	{
 		if (empty($value))
 			return;
@@ -114,7 +115,7 @@ class OpenGraphBuilder extends Object implements IOpenGraphObjectBuilder
 		if ($this->isValueIterable($value))
 		{
 			foreach ($value as $file)
-				$this->appendMediaMetaTags($tags, $namespace, $file);
+				$this->appendMediaMetaTags($tags, $namespace, $file, null, $mimeType);
 			return;
 		}
 
@@ -125,7 +126,7 @@ class OpenGraphBuilder extends Object implements IOpenGraphObjectBuilder
 			if (!$value->exists())
 				return;
 
-			$this->appendMediaMetaTags($tags, $namespace, $value->getAbsoluteURL());
+			$this->appendMediaMetaTags($tags, $namespace, $value->getAbsoluteURL(), $https, $mimeType);
 			/**
 			 * If you have the mediadata extension installed, this should correctly populate video width/height elements
 			 * @link https://github.com/tractorcow/silverstripe-mediadata
@@ -138,7 +139,7 @@ class OpenGraphBuilder extends Object implements IOpenGraphObjectBuilder
 		// Handle IMediaFile objects
 		if ($value instanceof IMediaFile)
 		{
-			$this->appendMediaMetaTags($tags, $namespace, $value->getAbsoluteURL());
+			$this->appendMediaMetaTags($tags, $namespace, $value->getAbsoluteURL(), $https, $value->getType());
 			$this->AppendTag($tags, "$namespace:width", $value->getWidth());
 			$this->AppendTag($tags, "$namespace:height", $value->getHeight());
 			return;
@@ -154,7 +155,8 @@ class OpenGraphBuilder extends Object implements IOpenGraphObjectBuilder
 			// Ensure the main image tag only contains the unsecure url
 			$value = preg_replace('/^https:/i', 'http:', $value);
 
-			$mimeType = $this->getMimeType($value);
+			// Attempt to auto-detect mime type if missing
+			if(empty($mimeType)) $mimeType = $this->getMimeType($value);
 
 			// Append image_src meta tag if not present yet
 			if (preg_match('/^image.*/', $mimeType) && !strstr($tags, 'rel="image_src"'))
