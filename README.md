@@ -58,6 +58,18 @@ OpenGraph:
 * The default_tagbuilder is the name of the class to use to generate tags (unless a type has one
   specified explicitly). See below under [Adding new types][#adding-new-types] for details.
 
+Any value above can be set to an empty string to disable it completely. E.g.
+
+```yaml
+---
+Name: myopengraphsettings
+After: '#opengraphsettings'
+---
+OpenGraph:
+  application_id: ''
+  admin_id: ''
+```
+
 ## How to do stuff
 
 ### Implementing Open Graph object properties
