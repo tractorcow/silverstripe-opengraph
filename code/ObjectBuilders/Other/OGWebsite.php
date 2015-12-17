@@ -2,5 +2,4 @@
 
 class OGWebsite extends OpenGraphBuilder
 {
-	
 }
