@@ -131,7 +131,7 @@ class OpenGraphObjectExtension extends SiteTreeExtension implements IOGObjectExp
 		// Intelligent fallback for SiteTree instances
 		$contentField = $this->owner->dbObject('Content');
 		if ($contentField instanceof Text) {
-			return $contentField->FirstParagraph();
+			return $contentField->Summary(100);
 		}
 	}
 
