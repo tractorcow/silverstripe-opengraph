@@ -15,27 +15,31 @@ class OpenGraphObjectExtension extends SiteTreeExtension implements IOGObjectExp
 	 * @return string The HTML tag to use for the opengraph namespace(s)
 	 */
 	public function getOGNS()
-	{
+    	{
 		// todo : Should custom namespace be injected here, or left up to user code?
-		
-		$ns = ' xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml"';
-		if ($this->owner instanceof IOGMusic)
-			$ns .= ' xmlns:music="http://ogp.me/ns/music#"';
-		if ($this->owner instanceof IOGVideo)
-			$ns .= ' xmlns:video="http://ogp.me/ns/video#"';
-		if ($this->owner instanceof IOGArticle)
-			$ns .= ' xmlns:article="http://ogp.me/ns/article#"';
-		if ($this->owner instanceof IOGBook)
-			$ns .= ' xmlns:book="http://ogp.me/ns/book#"';
-		if ($this->owner instanceof IOGProfile)
-			$ns .= ' xmlns:profile="http://ogp.me/ns/profile#"';
-
-		// Since the default type is website we should make sure that the correct namespace is applied in the default case
-		if ($this->owner instanceof IOGWebsite || $this->owner->getOGType() == OGTypes::DefaultType)
-			$ns .= ' xmlns:website="http://ogp.me/ns/website#"';
+		$ns = ' prefix="og: http://ogp.me/ns#  fb: http://www.facebook.com/2008/fbml';
+		if ($this->owner instanceof IOGMusic) {
+		    $ns .= ' music: http://ogp.me/ns/music#';
+		}
+		if ($this->owner instanceof IOGVideo) {
+		    $ns .= ' video: http://ogp.me/ns/video#';
+		}
+		if ($this->owner instanceof IOGArticle) {
+		    $ns .= ' article: http://ogp.me/ns/article#';
+		}
+		if ($this->owner instanceof IOGBook) {
+		    $ns .= ' book: http://ogp.me/ns/book#';
+		}
+		if ($this->owner instanceof IOGProfile) {
+		    $ns .= ' profile: http://ogp.me/ns/profile#';
+		}
+		if ($this->owner instanceof IOGWebsite || $this->owner->getOGType() == OGTypes::DefaultType) {
+		    $ns .= ' website: http://ogp.me/ns/website#';
+		}
+		$ns .= '"';
 
 		return $ns;
-	}
+    	}
 
 
 	/**
