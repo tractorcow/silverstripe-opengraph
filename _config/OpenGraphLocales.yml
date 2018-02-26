@@ -3,7 +3,7 @@
 ## See https://www.facebook.com/translations/FacebookLocales.xml for this master list
 Name: opengraphlocales
 ---
-OpenGraph:
+TractorCow\OpenGraph\OpenGraph:
   locales:
     af_ZA: 'Afrikaans'
     ar_AR: 'Arabic'
@@ -82,4 +82,3 @@ OpenGraph:
     zh_CN: 'Simplified Chinese (China)'
     zh_HK: 'Traditional Chinese (Hong Kong)'
     zh_TW: 'Traditional Chinese (Taiwan)'
-    
