@@ -1,8 +1,12 @@
 {
 	"name": "tractorcow/silverstripe-opengraph",
-	"description": "Implementation of the Facebook Opengraph protocol for Silverstripe",
+	"description": "Implementation of the Facebook Open Graph protocol for SilverStripe",
 	"type": "silverstripe-module",
-	"keywords": ["silverstripe", "facebook", "opengraph"],
+	"keywords": [
+		"silverstripe",
+		"facebook",
+		"opengraph"
+	],
 	"license": "BSD-3-Clause",
 	"authors": [
 		{
@@ -13,11 +17,28 @@
 	"support": {
 		"issues": "http://github.com/tractorcow/silverstripe-opengraph/issues"
 	},
-	"require": {	
-		"silverstripe/framework": "^3.1",
+	"require": {
+		"silverstripe/recipe-core": "^1.0",
 		"composer/installers": "*"
 	},
 	"extra": {
-		"installer-name": "opengraph"
-	}
+		"installer-name": "opengraph",
+		"branch-alias": {
+			"4": "4.x-dev"
+		},
+        "expose": [
+            "images"
+        ]
+	},
+	"scripts": {
+		"lint": "phpcs -s src/ tests/"
+	},
+	"autoload": {
+		"psr-4": {
+			"TractorCow\\OpenGraph\\": "src/",
+			"TractorCow\\OpenGraph\\Tests\\": "tests/"
+		}
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true
 }
