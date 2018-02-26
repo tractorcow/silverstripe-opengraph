@@ -1,0 +1,17 @@
+SilverStripe\SiteConfig\SiteConfig:
+  default:
+    Title: "Test Website"
+TractorCow\OpenGraph\Tests\Model\TestPage:
+  page1:
+    Title: Testpage
+TractorCow\OpenGraph\Tests\Model\TestProfile:
+  tractorcow:
+    FirstName: Damian
+    Surname: Mooyman
+    Nickname: TractorCow
+    Gender: Male
+  catwoman:
+    FirstName: Selina
+    Surname: Kyle
+    Nickname: Catwoman
+    Gender: Female
