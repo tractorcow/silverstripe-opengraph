@@ -49,8 +49,11 @@ class OpenGraphBuilder extends Object implements IOpenGraphObjectBuilder
 
         // check tag type
         if (is_scalar($content)) {
-            return $tags .= sprintf("<meta property=\"%s\" content=\"%s\" />\n", Convert::raw2att($name),
-                    Convert::raw2att($content));
+            return $tags .= sprintf(
+                "<meta property=\"%s\" content=\"%s\" />\n",
+                Convert::raw2att($name),
+                Convert::raw2att($content)
+            );
         }
 
         trigger_error('Invalid tag type: ' . gettype($content), E_USER_ERROR);
@@ -83,9 +86,11 @@ class OpenGraphBuilder extends Object implements IOpenGraphObjectBuilder
         if (empty($rel) || empty($link)) {
             return;
         }
-        $tags .= sprintf("<link rel=\"%s\" href=\"%s\" type=\"%s\" />\n", Convert::raw2att($rel),
-                Convert::raw2att($link),
-                $type
+        $tags .= sprintf(
+            "<link rel=\"%s\" href=\"%s\" type=\"%s\" />\n",
+            Convert::raw2att($rel),
+            Convert::raw2att($link),
+            $type
                         ? $type
                         : $this->getMimeType($link)
         );

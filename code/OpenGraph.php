@@ -68,7 +68,7 @@ class OpenGraph
      * Configure the site to use a specified value for a field. Specifying 'SiteConfig'
      * will cause the value for this field to be managed via the SiteConfig
      * @param string $field
-     * @param string $value 
+     * @param string $value
      */
     public static function set_config($field, $value = 'SiteConfig')
     {
@@ -77,7 +77,7 @@ class OpenGraph
     
     /**
      * Sets the application ID of this site, or 'SiteConfig' to manage in CMS
-     * @param string $value 
+     * @param string $value
      */
     public static function set_application($value)
     {
@@ -86,7 +86,7 @@ class OpenGraph
     
     /**
      * Sets the admin ID of this site, or 'SiteConfig' to manage in CMS
-     * @param string $value 
+     * @param string $value
      */
     public static function set_admin($value)
     {
@@ -95,7 +95,7 @@ class OpenGraph
     
     /**
      * Retrieves the default class used to build tags
-     * @return type 
+     * @return type
      */
     public static function get_default_tagbuilder()
     {

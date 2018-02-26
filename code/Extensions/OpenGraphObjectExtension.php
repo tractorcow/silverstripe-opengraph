@@ -17,28 +17,26 @@ class OpenGraphObjectExtension extends SiteTreeExtension implements IOGObjectExp
     public function getOGNS()
     {
         // todo : Should custom namespace be injected here, or left up to user code?
-
-        $ns = ' xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml"';
+        $ns = ' prefix="og: http://ogp.me/ns#  fb: http://www.facebook.com/2008/fbml';
         if ($this->owner instanceof IOGMusic) {
-            $ns .= ' xmlns:music="http://ogp.me/ns/music#"';
+            $ns .= ' music: http://ogp.me/ns/music#';
         }
         if ($this->owner instanceof IOGVideo) {
-            $ns .= ' xmlns:video="http://ogp.me/ns/video#"';
+            $ns .= ' video: http://ogp.me/ns/video#';
         }
         if ($this->owner instanceof IOGArticle) {
-            $ns .= ' xmlns:article="http://ogp.me/ns/article#"';
+            $ns .= ' article: http://ogp.me/ns/article#';
         }
         if ($this->owner instanceof IOGBook) {
-            $ns .= ' xmlns:book="http://ogp.me/ns/book#"';
+            $ns .= ' book: http://ogp.me/ns/book#';
         }
         if ($this->owner instanceof IOGProfile) {
-            $ns .= ' xmlns:profile="http://ogp.me/ns/profile#"';
+            $ns .= ' profile: http://ogp.me/ns/profile#';
         }
-
-        // Since the default type is website we should make sure that the correct namespace is applied in the default case
         if ($this->owner instanceof IOGWebsite || $this->owner->getOGType() == OGTypes::DefaultType) {
-            $ns .= ' xmlns:website="http://ogp.me/ns/website#"';
+            $ns .= ' website: http://ogp.me/ns/website#';
         }
+        $ns .= '"';
 
         return $ns;
     }
@@ -52,12 +50,12 @@ class OpenGraphObjectExtension extends SiteTreeExtension implements IOGObjectExp
     {
         // Determine type
         $type = $this->owner->getOGType();
-        
+
         // Case for non-types
         if (empty($type)) {
             return null;
         }
-        
+
         // Determine type, if configured
         $prototype = OpenGraph::get_prototype($type);
         if (!empty($prototype['tagbuilder'])) {
@@ -65,7 +63,7 @@ class OpenGraphObjectExtension extends SiteTreeExtension implements IOGObjectExp
         } else {
             $class = OpenGraph::get_default_tagbuilder();
         }
-        
+
         // Construct instance from type
         return new $class();
     }
@@ -77,7 +75,7 @@ class OpenGraphObjectExtension extends SiteTreeExtension implements IOGObjectExp
         if (!$builder) {
             return;
         }
-        
+
         $config = SiteConfig::current_site_config();
         // Default tags
         $builder->BuildTags($tags, $this->owner, $config);
@@ -142,11 +140,11 @@ class OpenGraphObjectExtension extends SiteTreeExtension implements IOGObjectExp
                 return $description;
             }
         }
-        
+
         // Intelligent fallback for SiteTree instances
         $contentField = $this->owner->dbObject('Content');
         if ($contentField instanceof Text) {
-            return $contentField->FirstParagraph();
+            return $contentField->Summary(100);
         }
     }
 
@@ -159,12 +157,12 @@ class OpenGraphObjectExtension extends SiteTreeExtension implements IOGObjectExp
     {
         // Use current locale
         $locale = i18n::get_locale();
-        
+
         // Check locale is valid
         if (OpenGraph::is_locale_valid($locale)) {
             return $locale;
         }
-        
+
         // Return default
         return OpenGraph::get_default_locale();
     }

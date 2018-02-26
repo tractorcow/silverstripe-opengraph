@@ -3,7 +3,7 @@
 /**
  * Defines the list of standard opengraph object types.
  * User types may be substitude in place of any of these for the og:type property,
- * as long as the namespace is correctly implemented 
+ * as long as the namespace is correctly implemented
  */
 class OGTypes
 {
@@ -23,7 +23,7 @@ class OGTypes
     const Website = 'website';
     
     /**
-     * @link http://developers.facebook.com/docs/opengraph/music/ 
+     * @link http://developers.facebook.com/docs/opengraph/music/
      */
     const MetaData = 'metadata';
     
