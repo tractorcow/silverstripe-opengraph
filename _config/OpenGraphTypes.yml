@@ -3,41 +3,41 @@
 # This list may be added to to create new object types
 Name: opengraphobjecttypes
 ---
-OpenGraph:
+TractorCow\OpenGraph\OpenGraph:
   types:
     'music.song':
-      interface: IOGMusicSong
-      tagbuilder: OGMusicSong
+      interface: TractorCow\OpenGraph\Interfaces\ObjectTypes\Music\IOGMusicSong
+      tagbuilder: TractorCow\OpenGraph\ObjectBuilders\Music\OGMusicSong
     'music.album':
-      interface: IOGMusicAlbum
-      tagbuilder: OGMusicAlbum
+      interface: TractorCow\OpenGraph\Interfaces\ObjectTypes\Music\IOGMusicAlbum
+      tagbuilder: TractorCow\OpenGraph\ObjectBuilders\Music\OGMusicAlbum
     'music.playlist':
-      interface: IOGMusicPlaylist
-      tagbuilder: OGMusicPlaylist
+      interface: TractorCow\OpenGraph\Interfaces\ObjectTypes\Music\IOGMusicPlaylist
+      tagbuilder: TractorCow\OpenGraph\ObjectBuilders\Music\OGMusicPlaylist
     'music.radio_station':
-      interface: IOGMusicRadioStation
-      tagbuilder: OGMusicRadioStation
+      interface: TractorCow\OpenGraph\Interfaces\ObjectTypes\Music\IOGMusicRadioStation
+      tagbuilder: TractorCow\OpenGraph\ObjectBuilders\Music\OGMusicRadioStation
     'video.movie':
-      interface: IOGVideoMovie
-      tagbuilder: OGVideoMovie
+      interface: TractorCow\OpenGraph\Interfaces\ObjectTypes\Video\IOGVideoMovie
+      tagbuilder: TractorCow\OpenGraph\ObjectBuilders\Video\OGVideoMovie
     'video.episode':
-      interface: IOGVideoEpisode
-      tagbuilder: OGVideoEpisode
+      interface: TractorCow\OpenGraph\Interfaces\ObjectTypes\Video\IOGVideoEpisode
+      tagbuilder: TractorCow\OpenGraph\ObjectBuilders\Video\OGVideoEpisode
     'video.tv_show':
-      interface: IOGVideoTVShow
-      tagbuilder: OGVideoTVShow
+      interface: TractorCow\OpenGraph\Interfaces\ObjectTypes\Video\IOGVideoTVShow
+      tagbuilder: TractorCow\OpenGraph\ObjectBuilders\Video\OGVideoTVShow
     'video.other':
-      interface: IOGVideoOther
-      tagbuilder: OGVideoOther
+      interface: TractorCow\OpenGraph\Interfaces\ObjectTypes\Video\IOGVideoOther
+      tagbuilder: TractorCow\OpenGraph\ObjectBuilders\Video\OGVideoOther
     'article':
-      interface: IOGArticle
-      tagbuilder: OGArticle
+      interface: TractorCow\OpenGraph\Interfaces\ObjectTypes\Other\IOGArticle
+      tagbuilder: TractorCow\OpenGraph\ObjectBuilders\Other\OGArticle
     'book':
-      interface: IOGBook
-      tagbuilder: OGBook
+      interface: TractorCow\OpenGraph\Interfaces\ObjectTypes\Other\IOGBook
+      tagbuilder: TractorCow\OpenGraph\ObjectBuilders\Other\OGBook
     'profile':
-      interface: IOGProfile
-      tagbuilder: OGProfile
+      interface: TractorCow\OpenGraph\Interfaces\ObjectTypes\Other\IOGProfile
+      tagbuilder: TractorCow\OpenGraph\ObjectBuilders\Other\OGProfile
     'website':
-      interface: IOGWebsite
-      tagbuilder: OGWebsite
+      interface: TractorCow\OpenGraph\Interfaces\ObjectTypes\Other\IOGWebsite
+      tagbuilder: TractorCow\OpenGraph\ObjectBuilders\Other\OGWebsite
