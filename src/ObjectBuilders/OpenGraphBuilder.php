@@ -2,6 +2,7 @@
 
 namespace TractorCow\OpenGraph\ObjectBuilders;
 
+use SilverStripe\Assets\Storage\DBFile;
 use SilverStripe\Control\HTTP;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injectable;
@@ -153,7 +154,7 @@ class OpenGraphBuilder implements IOpenGraphObjectBuilder
         }
 
         // Handle File objects
-        if ($value instanceof File) {
+        if ($value instanceof File || $value instanceof DBFile) {
             if (!$value->exists()) {
                 return;
             }
