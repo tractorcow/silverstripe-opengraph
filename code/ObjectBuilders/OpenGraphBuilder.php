@@ -3,7 +3,7 @@
 /**
  * @author Damian Mooyman
  */
-class OpenGraphBuilder extends Object implements IOpenGraphObjectBuilder
+class OpenGraphBuilder extends SS_Object implements IOpenGraphObjectBuilder
 {
 
 	protected $mimeTypes = null;
