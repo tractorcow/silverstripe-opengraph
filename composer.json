@@ -8,12 +8,10 @@
         "opengraph"
     ],
     "license": "BSD-3-Clause",
-    "authors": [
-        {
-            "name": "Damian Mooyman",
-            "email": "damian.mooyman@gmail.com"
-        }
-    ],
+    "authors": [{
+        "name": "Damian Mooyman",
+        "email": "damian.mooyman@gmail.com"
+    }],
     "support": {
         "issues": "http://github.com/tractorcow/silverstripe-opengraph/issues"
     },
@@ -32,20 +30,6 @@
         },
         "expose": [
             "images"
-        ],
-        "project-files-installed": [
-            "app/.htaccess",
-            "app/_config.php",
-            "app/_config/mysite.yml",
-            "app/src/Page.php",
-            "app/src/PageController.php"
-        ],
-        "public-files-installed": [
-            ".htaccess",
-            "index.php",
-            "install-frameworkmissing.html",
-            "install.php",
-            "web.config"
         ]
     },
     "scripts": {
