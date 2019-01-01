@@ -1,48 +1,66 @@
 {
-	"name": "tractorcow/silverstripe-opengraph",
-	"description": "Implementation of the Facebook Open Graph protocol for SilverStripe",
-	"type": "silverstripe-vendormodule",
-	"keywords": [
-		"silverstripe",
-		"facebook",
-		"opengraph"
-	],
-	"license": "BSD-3-Clause",
-	"authors": [
-		{
-			"name": "Damian Mooyman",
-			"email": "damian.mooyman@gmail.com"
-		}
-	],
-	"support": {
-		"issues": "http://github.com/tractorcow/silverstripe-opengraph/issues"
-	},
-	"require": {
-		"silverstripe/recipe-core": "^1 || ^4",
-		"composer/installers": "*"
-	},
+    "name": "tractorcow/silverstripe-opengraph",
+    "description": "Implementation of the Facebook Open Graph protocol for SilverStripe",
+    "type": "silverstripe-vendormodule",
+    "keywords": [
+        "silverstripe",
+        "facebook",
+        "opengraph"
+    ],
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Damian Mooyman",
+            "email": "damian.mooyman@gmail.com"
+        }
+    ],
+    "support": {
+        "issues": "http://github.com/tractorcow/silverstripe-opengraph/issues"
+    },
+    "require": {
+        "silverstripe/recipe-core": "^1 || ^4",
+        "composer/installers": "*"
+    },
     "require-dev": {
         "phpunit/PHPUnit": "^5.7",
         "silverstripe/recipe-cms": "^1 || ^4"
     },
-	"extra": {
-		"installer-name": "opengraph",
-		"branch-alias": {
-			"dev-master": "4.x-dev"
-		},
+    "extra": {
+        "installer-name": "opengraph",
+        "branch-alias": {
+            "dev-master": "4.x-dev"
+        },
         "expose": [
             "images"
+        ],
+        "project-files-installed": [
+            "app/.htaccess",
+            "app/_config.php",
+            "app/_config/mysite.yml",
+            "app/src/Page.php",
+            "app/src/PageController.php"
+        ],
+        "public-files-installed": [
+            ".htaccess",
+            "index.php",
+            "install-frameworkmissing.html",
+            "install.php",
+            "web.config"
         ]
-	},
-	"scripts": {
-		"lint": "phpcs -s src/ tests/"
-	},
-	"autoload": {
-		"psr-4": {
-			"TractorCow\\OpenGraph\\": "src/",
-			"TractorCow\\OpenGraph\\Tests\\": "tests/"
-		}
-	},
-	"minimum-stability": "dev",
-	"prefer-stable": true
+    },
+    "scripts": {
+        "lint": "phpcs -s src/ tests/"
+    },
+    "autoload": {
+        "psr-4": {
+            "TractorCow\\OpenGraph\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TractorCow\\OpenGraph\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
