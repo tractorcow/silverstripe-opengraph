@@ -103,6 +103,20 @@ class MyPage extends Page {
 By implementing these properties explicitly in your page classes, you can override the default properties
 defined in the OpenGraphPageExtension.
 
+#### Setting open Graph default image
+
+The Open Graph image is a required property and should be supplied a default image.
+You can set the path to the default image in the yml config
+
+```yml
+TractorCow\OpenGraph\Extensions\OpenGraphObjectExtension:
+  default_image: 'app/images/logo.png'
+  theme_name_default_image: 'app/images/theme-logo.png'
+```
+
+Note that you can specify a different image for each theme by prefixing the default_image config name with the theme name (replace everything that is not a letter with an _).
+This is useful if you want to set a different default image on sub sites.
+
 ### Adding new types
 
 If you wish to add a new og:type you will need to:

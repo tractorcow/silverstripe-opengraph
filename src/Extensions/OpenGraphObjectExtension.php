@@ -9,6 +9,7 @@ use SilverStripe\i18n\i18n;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\FieldType\DBText;
 use SilverStripe\SiteConfig\SiteConfig;
+use SilverStripe\View\SSViewer;
 use TractorCow\OpenGraph\Constants\OGDeterminers;
 use TractorCow\OpenGraph\Constants\OGTypes;
 use TractorCow\OpenGraph\Interfaces\IOpenGraphObjectBuilder;
@@ -139,6 +140,20 @@ class OpenGraphObjectExtension extends DataExtension implements IOGObjectExplici
 
     public function getOGImage()
     {
+        // If a theme is in use, check if a default image is provided (theme_name_default_image)
+        // This is useful to have a different default image on sub sites
+        if (SSViewer::config()->uninherited('theme_enabled') === true) {
+            $themes = SSViewer::get_themes();
+            if (isset($themes[0])) {
+                $themeName = preg_replace('/[^\w ]+/ ', '_', strtolower($themes[0]));
+                $config = $themeName . '_default_image';
+
+                if ($image = self::config()->{$config}) {
+                    return Director::absoluteURL(ModuleResourceLoader::resourceURL($image));
+                }
+            }
+        }
+
         // Since og:image is a required property, provide a reasonable default
         if ($image = self::config()->default_image) {
             return Director::absoluteURL(ModuleResourceLoader::resourceURL($image));
