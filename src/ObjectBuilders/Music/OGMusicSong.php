@@ -10,9 +10,9 @@ class OGMusicSong extends AbstractOGMusic
 {
     /**
      * Builds a list of song/album links links
-     * @param string $tags The current tag string to append these two
-     * @param string $namespace The namespace to use for this element
-     * @param IOGSongAlbum[]|IOGSongAlbum|IOGMusicAlbum[]|IOGMusicAlbum|string[]|string $value Related album(s) or link(s) to album(s)
+     * @param string                                                                    $tags      The current tag string to append these two
+     * @param string                                                                    $namespace The namespace to use for this element
+     * @param IOGSongAlbum[]|IOGSongAlbum|IOGMusicAlbum[]|IOGMusicAlbum|string[]|string $value     Related album(s) or link(s) to album(s)
      */
     protected function appendRelatedAlbumList(&$tags, $namespace, $value)
     {
@@ -29,7 +29,7 @@ class OGMusicSong extends AbstractOGMusic
         }
 
         // Handle explicit profile object
-        if ($value instanceof IOGSongAlbum) {
+        if ($this->implementsType($value, IOGSongAlbum::class)) {
             /* @var $value IOGSongAlbum */
             $this->appendRelatedAlbumList($tags, $namespace, $value->getOGAlbum());
             $this->AppendTag($tags, "$namespace:disc", $value->getOGDisc());
@@ -37,7 +37,7 @@ class OGMusicSong extends AbstractOGMusic
             return;
         }
 
-        if ($value instanceof IOGMusicAlbum) {
+        if ($this->implementsType($value, IOGMusicAlbum::class)) {
             $this->AppendTag($tags, $namespace, $value->AbsoluteLink());
             return;
         }

@@ -9,7 +9,11 @@ use TractorCow\OpenGraph\Interfaces\ObjectTypes\Video\IOGVideoEpisode;
  */
 class OGVideoEpisode extends AbstractOGVideo
 {
-    protected function appendEpisodeTags(&$tags, IOGVideoEpisode $video)
+    /**
+     * @param string          $tags
+     * @param IOGVideoEpisode $video
+     */
+    protected function appendEpisodeTags(&$tags, $video)
     {
         $this->AppendTag($tags, 'video:series', $video->getOGVideoSeries());
     }

@@ -7,8 +7,11 @@ use TractorCow\OpenGraph\ObjectBuilders\OpenGraphBuilder;
 
 class OGProfile extends OpenGraphBuilder
 {
-
-    protected function appendProfileTags(&$tags, IOGProfile $profile)
+    /**
+     * @param string     $tags
+     * @param IOGProfile $profile
+     */
+    protected function appendProfileTags(&$tags, $profile)
     {
         $this->AppendTag($tags, 'profile:first_name', $profile->getOGFirstName());
         $this->AppendTag($tags, 'profile:last_name', $profile->getOGLastName());

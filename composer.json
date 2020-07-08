@@ -28,7 +28,7 @@
 	"extra": {
 		"installer-name": "opengraph",
 		"branch-alias": {
-			"dev-master": "4.x-dev"
+			"dev-master": "5.x-dev"
 		},
         "expose": [
             "images"

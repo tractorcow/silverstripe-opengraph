@@ -16,7 +16,7 @@ abstract class AbstractOGMusic extends OpenGraphBuilder
 
     /**
      * Builds a list of song links
-     * @param string $tags The current tag string to append these two
+     * @param string $tags      The current tag string to append these two
      * @param string $namespace The namespace to use for this element
      * @param IOGSongAlbum[]|IOGSongAlbum|IOGMusicSong[]|IOGMusicSong|string[]|string Song object(s) or url(s) to object(s)
      */
@@ -35,7 +35,8 @@ abstract class AbstractOGMusic extends OpenGraphBuilder
         }
 
         // Handle explicit song/album mapping object
-        if ($value instanceof IOGSongAlbum) { /* @var $value IOGSongAlbum */
+        if ($this->implementsType($value, IOGSongAlbum::class)) {
+            /* @var $value IOGSongAlbum */
             $this->appendRelatedSongList($tags, $namespace, $value->getOGSong());
             $this->AppendTag($tags, "$namespace:disc", $value->getOGDisc());
             $this->AppendTag($tags, "$namespace:track", $value->getOGTrack());
@@ -43,7 +44,7 @@ abstract class AbstractOGMusic extends OpenGraphBuilder
         }
 
         // Handle single song object
-        if ($value instanceof IOGMusicSong) {
+        if ($this->implementsType($value, IOGMusicSong::class)) {
             /* @var $value IOGMusicSong */
             $this->AppendTag($tags, $namespace, $value->AbsoluteLink());
             return;

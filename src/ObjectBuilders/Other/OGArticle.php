@@ -7,8 +7,11 @@ use TractorCow\OpenGraph\ObjectBuilders\OpenGraphBuilder;
 
 class OGArticle extends OpenGraphBuilder
 {
-
-    protected function appendArticleTags(&$tags, IOGArticle $article)
+    /**
+     * @param string     $tags
+     * @param IOGArticle $article
+     */
+    protected function appendArticleTags(&$tags, $article)
     {
         $this->appendDateTag($tags, 'article:published_time', $article->getOGArticlePublishedTime());
         $this->appendDateTag($tags, 'article:modified_time', $article->getOGArticleModifiedTime());

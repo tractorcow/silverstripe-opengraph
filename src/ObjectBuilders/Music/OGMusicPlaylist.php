@@ -6,7 +6,11 @@ use TractorCow\OpenGraph\Interfaces\ObjectTypes\Music\IOGMusicPlaylist;
 
 class OGMusicPlaylist extends AbstractOGMusic
 {
-    protected function appendPlaylistTags(&$tags, IOGMusicPlaylist $playlist)
+    /**
+     * @param string           $tags
+     * @param IOGMusicPlaylist $playlist
+     */
+    protected function appendPlaylistTags(&$tags, $playlist)
     {
         $this->appendRelatedSongList($tags, 'music:song', $playlist->getOGMusicSongs());
         $this->appendRelatedProfileTags($tags, 'music:creator', $playlist->getOGMusicCreators());
