@@ -7,6 +7,7 @@ use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\i18n\i18n;
 use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBText;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\View\SSViewer;
@@ -26,6 +27,7 @@ use TractorCow\OpenGraph\OpenGraph;
  * Adds open graph functionality to a page or data object
  *
  * @author Damian Mooyman
+ * @property DataObject|OpenGraphObjectExtension $owner
  */
 class OpenGraphObjectExtension extends DataExtension implements IOGObjectExplicit
 {
@@ -76,7 +78,7 @@ class OpenGraphObjectExtension extends DataExtension implements IOGObjectExplici
      * Determines the tag builder to use for this object
      * @return IOpenGraphObjectBuilder
      */
-    protected function getTagBuilder()
+    public function getTagBuilder()
     {
         // Determine type
         $type = $this->owner->getOGType();
@@ -101,7 +103,7 @@ class OpenGraphObjectExtension extends DataExtension implements IOGObjectExplici
     public function MetaTags(&$tags)
     {
         // Generate tag builder
-        $builder = $this->getTagBuilder();
+        $builder = $this->owner->getTagBuilder();
         if (!$builder) {
             return;
         }
