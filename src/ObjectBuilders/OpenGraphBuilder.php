@@ -175,7 +175,7 @@ class OpenGraphBuilder implements IOpenGraphObjectBuilder
 
         // Handle IMediaFile objects
         if ($this->implementsType($value, IMediaFile::class)) {
-            $this->appendMediaMetaTags($tags, $namespace, $value->getAbsoluteURL(), $https, $value->getType());
+            $this->appendMediaMetaTags($tags, $namespace, $value->getAbsoluteURL(), $value->getSecureURL(), $value->getType());
             $this->AppendTag($tags, "$namespace:width", $value->getWidth());
             $this->AppendTag($tags, "$namespace:height", $value->getHeight());
             return;

@@ -6,7 +6,7 @@ namespace TractorCow\OpenGraph\Interfaces\ObjectTypes\Other\Relations;
  * Can be used in place of the File object to refer to Video/Image files
  *
  * @author Damo
- * @link Image
+ * @link   Image
  */
 interface IMediaFile
 {
@@ -16,26 +16,33 @@ interface IMediaFile
      *
      * @return integer
      */
-    function getWidth();
+    public function getWidth();
 
     /**
      * Media height in pixels
      *
      * @return integer
      */
-    function getHeight();
+    public function getHeight();
 
     /**
      * Media URL
      *
      * @return string
      */
-    function getAbsoluteURL();
+    public function getAbsoluteURL();
+
+    /**
+     * Secure URL, if different from absolute URL
+     *
+     * @return mixed
+     */
+    public function getSecureURL();
 
     /**
      * Media mime type
      *
      * @return string
      */
-    function getType();
+    public function getType();
 }
