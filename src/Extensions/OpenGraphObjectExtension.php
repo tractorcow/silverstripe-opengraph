@@ -13,6 +13,7 @@ use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\View\SSViewer;
 use TractorCow\OpenGraph\Constants\OGDeterminers;
 use TractorCow\OpenGraph\Constants\OGTypes;
+use TractorCow\OpenGraph\InspectionTrait;
 use TractorCow\OpenGraph\Interfaces\IOpenGraphObjectBuilder;
 use TractorCow\OpenGraph\Interfaces\ObjectTypes\IOGObjectExplicit;
 use TractorCow\OpenGraph\Interfaces\ObjectTypes\Music\IOGMusic;
@@ -32,6 +33,7 @@ use TractorCow\OpenGraph\OpenGraph;
 class OpenGraphObjectExtension extends DataExtension implements IOGObjectExplicit
 {
     use Configurable;
+    use InspectionTrait;
 
     /**
      * The default image to use
@@ -50,22 +52,24 @@ class OpenGraphObjectExtension extends DataExtension implements IOGObjectExplici
     {
         // todo : Should custom namespace be injected here, or left up to user code?
         $ns = ' prefix="og: http://ogp.me/ns#  fb: http://www.facebook.com/2008/fbml';
-        if ($this->owner instanceof IOGMusic) {
+        if ($this->implementsType($this->owner, IOGMusic::class)) {
             $ns .= ' music: http://ogp.me/ns/music#';
         }
-        if ($this->owner instanceof IOGVideo) {
+        if ($this->implementsType($this->owner, IOGVideo::class)) {
             $ns .= ' video: http://ogp.me/ns/video#';
         }
-        if ($this->owner instanceof IOGArticle) {
+        if ($this->implementsType($this->owner, IOGArticle::class)) {
             $ns .= ' article: http://ogp.me/ns/article#';
         }
-        if ($this->owner instanceof IOGBook) {
+        if ($this->implementsType($this->owner, IOGBook::class)) {
             $ns .= ' book: http://ogp.me/ns/book#';
         }
-        if ($this->owner instanceof IOGProfile) {
+        if ($this->implementsType($this->owner, IOGProfile::class)) {
             $ns .= ' profile: http://ogp.me/ns/profile#';
         }
-        if ($this->owner instanceof IOGWebsite || $this->owner->getOGType() == OGTypes::DEFAULT_TYPE) {
+        if ($this->implementsType($this->owner, IOGWebsite::class)
+            || $this->owner->getOGType() == OGTypes::DEFAULT_TYPE
+        ) {
             $ns .= ' website: http://ogp.me/ns/website#';
         }
         $ns .= '"';
