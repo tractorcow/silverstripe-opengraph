@@ -44,6 +44,13 @@ class OpenGraphObjectExtension extends DataExtension implements IOGObjectExplici
     private static $default_image = 'tractorcow/silverstripe-opengraph: images/logo.gif';
 
     /**
+     * Do not escpae HTML
+     * 
+     * @var string 
+     */
+    private static $default_cast = 'HTMLFragment';
+    
+    /**
      * Property for retrieving the opengraph namespace html tag(s).
      * This should be inserted into your Page.SS template as: "<html $OGNS>"
      * @return string The HTML tag to use for the opengraph namespace(s)
