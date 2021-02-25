@@ -48,7 +48,9 @@ class OpenGraphObjectExtension extends DataExtension implements IOGObjectExplici
      * 
      * @var string 
      */
-    private static $default_cast = 'HTMLFragment';
+    private static $casting = [
+        'OGNS' => 'HTMLFragment',
+    ];
     
     /**
      * Property for retrieving the opengraph namespace html tag(s).
