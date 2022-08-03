@@ -195,9 +195,11 @@ class OpenGraphObjectExtension extends DataExtension implements IOGObjectExplici
     {
         // Check MetaDescription has given content
         if ($this->owner->hasField('MetaDescription')) {
-            $description = trim($this->owner->MetaDescription);
-            if (!empty($description)) {
-                return $description;
+            if($this->owner->MetaDescription != null || $this->owner->MetaDescription != ''){
+                $description = trim($this->owner->MetaDescription);
+                if (!empty($description)) {
+                    return $description;
+                }
             }
         }
 
