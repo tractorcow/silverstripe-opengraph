@@ -45,13 +45,13 @@ class OpenGraphObjectExtension extends DataExtension implements IOGObjectExplici
 
     /**
      * Do not escpae HTML
-     * 
-     * @var string 
+     *
+     * @var string
      */
     private static $casting = [
         'OGNS' => 'HTMLFragment',
     ];
-    
+
     /**
      * Property for retrieving the opengraph namespace html tag(s).
      * This should be inserted into your Page.SS template as: "<html $OGNS>"
@@ -195,7 +195,7 @@ class OpenGraphObjectExtension extends DataExtension implements IOGObjectExplici
     {
         // Check MetaDescription has given content
         if ($this->owner->hasField('MetaDescription')) {
-            if($this->owner->MetaDescription != null || $this->owner->MetaDescription != ''){
+            if ($this->owner->MetaDescription != null || $this->owner->MetaDescription != '') {
                 $description = trim($this->owner->MetaDescription);
                 if (!empty($description)) {
                     return $description;

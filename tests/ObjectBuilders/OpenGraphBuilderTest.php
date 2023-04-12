@@ -2,6 +2,7 @@
 
 namespace TractorCow\OpenGraph\Tests\ObjectBuilders;
 
+use PHPUnit\Framework\Constraint\RegularExpression;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\i18n\i18n;
@@ -19,25 +20,26 @@ class OpenGraphBuilderTest extends SapphireTest
         TestProfile::class
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         Config::modify()->set(i18n::class, 'default_locale', 'en_US');
         i18n::set_locale('en_US');
     }
 
-    public function testBuildTags()
+    public function testBuildTags(): void
     {
         $builder = OpenGraphBuilder::create();
         $tags = '';
         $cfg = SiteConfig::current_site_config();
         $builder->BuildTags($tags, $this->objFromFixture(TestPage::class, 'page1'), $cfg);
 
-        $this->assertContains('<meta property="og:title" content="Testpage" />', $tags);
-        $this->assertContains('<meta property="og:type" content="website" />', $tags);
-        $this->assertRegExp('{<meta property="og:url" content=".*?" />}', $tags);
-        $this->assertRegExp('{<meta property="og:image" content=".*?/logo.gif.*?" />}', $tags);
-        $this->assertContains('<meta property="og:site_name" content="Test Website" />', $tags);
-        $this->assertContains('<meta property="og:locale" content="en_US" />', $tags);
+
+        $this->assertStringContainsString('<meta property="og:title" content="Testpage" />', $tags);
+        $this->assertStringContainsString('<meta property="og:type" content="website" />', $tags);
+        static::assertThat($tags, new RegularExpression('{<meta property="og:url" content=".*?" />}'));
+        static::assertThat($tags, new RegularExpression('{<meta property="og:image" content=".*?/logo.gif.*?" />}'));
+        $this->assertStringContainsString('<meta property="og:site_name" content="Test Website" />', $tags);
+        $this->assertStringContainsString('<meta property="og:locale" content="en_US" />', $tags);
     }
 }
