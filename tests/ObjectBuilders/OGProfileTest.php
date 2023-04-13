@@ -17,20 +17,20 @@ class OGProfileTest extends SapphireTest
         TestProfile::class
     ];
 
-    public function testBuildTags()
+    public function testBuildTags(): void
     {
         $builder = OGProfile::create();
         $tags = '';
         $cfg = SiteConfig::current_site_config();
         $builder->BuildTags($tags, $this->objFromFixture(TestProfile::class, 'tractorcow'), $cfg);
 
-        $this->assertContains('<meta property="og:title" content="Damian Mooyman" />', $tags);
-        $this->assertContains('<meta property="og:type" content="profile" />', $tags);
-        $this->assertContains('<meta property="og:url" content="http://example.com/profile/tractorcow" />', $tags);
-        $this->assertContains('<meta property="og:image" content="http://example.com/pic/tractorcow.jpg" />', $tags);
-        $this->assertContains('<meta property="profile:first_name" content="Damian" />', $tags);
-        $this->assertContains('<meta property="profile:last_name" content="Mooyman" />', $tags);
-        $this->assertContains('<meta property="profile:username" content="TractorCow" />', $tags);
-        $this->assertContains('<meta property="profile:gender" content="male" />', $tags);
+        $this->assertStringContainsString('<meta property="og:title" content="Damian Mooyman" />', $tags);
+        $this->assertStringContainsString('<meta property="og:type" content="profile" />', $tags);
+        $this->assertStringContainsString('<meta property="og:url" content="http://example.com/profile/tractorcow" />', $tags);
+        $this->assertStringContainsString('<meta property="og:image" content="http://example.com/pic/tractorcow.jpg" />', $tags);
+        $this->assertStringContainsString('<meta property="profile:first_name" content="Damian" />', $tags);
+        $this->assertStringContainsString('<meta property="profile:last_name" content="Mooyman" />', $tags);
+        $this->assertStringContainsString('<meta property="profile:username" content="TractorCow" />', $tags);
+        $this->assertStringContainsString('<meta property="profile:gender" content="male" />', $tags);
     }
 }

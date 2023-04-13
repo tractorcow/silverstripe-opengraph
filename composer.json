@@ -18,11 +18,11 @@
         "issues": "http://github.com/tractorcow/silverstripe-opengraph/issues"
     },
     "require": {
-        "silverstripe/recipe-core": "^1 || ^4"
+        "silverstripe/recipe-core": "^1 || ^4 || ^5"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.7",
-        "silverstripe/recipe-cms": "^1 || ^4"
+        "silverstripe/recipe-testing": "^3",
+        "silverstripe/recipe-cms": "^1 || ^4 || ^5"
     },
     "extra": {
         "installer-name": "opengraph",
@@ -31,6 +31,21 @@
         },
         "expose": [
             "images"
+        ],
+        "project-files-installed": [
+            ".htaccess",
+            "app/.htaccess",
+            "app/_config/mimevalidator.yml",
+            "app/_config/mysite.yml",
+            "app/src/Page.php",
+            "app/src/PageController.php",
+            "behat.yml",
+            "phpunit.xml.dist"
+        ],
+        "public-files-installed": [
+            ".htaccess",
+            "index.php",
+            "web.config"
         ]
     },
     "scripts": {
@@ -43,5 +58,12 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "silverstripe/recipe-plugin": true,
+            "silverstripe/vendor-plugin": true
+        }
+    }
 }
