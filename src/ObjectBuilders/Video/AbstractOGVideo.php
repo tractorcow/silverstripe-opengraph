@@ -15,7 +15,7 @@ abstract class AbstractOGVideo extends OpenGraphBuilder
 
     /**
      * Builds a list of actor links
-     * @param string $tags The current tag string to append these two
+     * @param string $tags      The current tag string to append these two
      * @param string $namespace The namespace to use for this element
      * @param IOGVideoActor[]|IOGVideoActor|IOGProfile[]|IOGProfile|string[]|string Song object(s) or url(s) to profile(s)
      */
@@ -34,14 +34,14 @@ abstract class AbstractOGVideo extends OpenGraphBuilder
         }
 
         // Handle explicit song/album mapping object
-        if ($value instanceof IOGVideoActor) {
+        if ($this->implementsType($value, IOGVideoActor::class)) {
             $this->appendRelatedActorList($tags, $namespace, $value->getOGActor());
             $this->AppendTag($tags, "$namespace:role", $value->getOGRole());
             return;
         }
 
         // Handle single song object
-        if ($value instanceof IOGProfile) {
+        if ($this->implementsType($value, IOGProfile::class)) {
             $this->AppendTag($tags, $namespace, $value->AbsoluteLink());
             return;
         }
@@ -56,7 +56,11 @@ abstract class AbstractOGVideo extends OpenGraphBuilder
         trigger_error('Invalid song type: ' . gettype($value), E_USER_ERROR);
     }
 
-    protected function appendVideoTags(&$tags, IOGVideo $video)
+    /**
+     * @param string   $tags
+     * @param IOGVideo $video
+     */
+    protected function appendVideoTags(&$tags, $video)
     {
         $this->appendRelatedActorList($tags, 'video:actor', $video->getOGVideoActors());
         $this->appendRelatedProfileTags($tags, 'video:director', $video->getOGVideoDirectors());

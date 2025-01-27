@@ -2,15 +2,16 @@
 
 namespace TractorCow\OpenGraph\ObjectBuilders;
 
+use SilverStripe\Assets\File;
 use SilverStripe\Assets\Storage\DBFile;
+use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\HTTP;
+use SilverStripe\Core\Convert;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\ORM\FieldType\DBDatetime;
 use SilverStripe\ORM\SS_List;
-use SilverStripe\CMS\Model\SiteTree;
-use SilverStripe\Core\Convert;
-use SilverStripe\Assets\File;
+use TractorCow\OpenGraph\InspectionTrait;
 use TractorCow\OpenGraph\Interfaces\IOGApplication;
 use TractorCow\OpenGraph\Interfaces\IOpenGraphObjectBuilder;
 use TractorCow\OpenGraph\Interfaces\ObjectTypes\IOGObject;
@@ -25,6 +26,7 @@ class OpenGraphBuilder implements IOpenGraphObjectBuilder
 {
     use Injectable;
     use Extensible;
+    use InspectionTrait;
 
     protected $mimeTypes = null;
 
@@ -35,7 +37,8 @@ class OpenGraphBuilder implements IOpenGraphObjectBuilder
 
     protected function isValueLinkable($value)
     {
-        return $value instanceof IOGObject || $value instanceof SiteTree;
+        return $this->implementsType($value, IOGObject::class)
+            || $value instanceof SiteTree;
     }
 
     /**
@@ -82,8 +85,8 @@ class OpenGraphBuilder implements IOpenGraphObjectBuilder
 
     /**
      * Append a list of tags, which may be either an array, or a comma-separated string
-     * @param string $tags The current tag string to append these to
-     * @param string $name Meta name attribute value
+     * @param string       $tags  The current tag string to append these to
+     * @param string       $name  Meta name attribute value
      * @param array|string $value Tag list
      */
     protected function appendRelatedTags(&$tags, $name, $value)
@@ -98,7 +101,7 @@ class OpenGraphBuilder implements IOpenGraphObjectBuilder
     /**
      * Generates a <link /> element and appends it to a set of header tags
      * @param string $tags The current tag string to append these to
-     * @param string $rel The rel attribute value
+     * @param string $rel  The rel attribute value
      * @param string $link URL to the linked resource
      * @param string $type Mime type of the resource, if known
      */
@@ -120,9 +123,9 @@ class OpenGraphBuilder implements IOpenGraphObjectBuilder
 
     /**
      * Builds a list of profile links
-     * @param string $tags The current tag string to append these two
-     * @param string $namespace The namespace to use for this element
-     * @param IOGProfile[]|IOGProfile|string[]|string $value A single, or list of profiles
+     * @param string                                  $tags      The current tag string to append these two
+     * @param string                                  $namespace The namespace to use for this element
+     * @param IOGProfile[]|IOGProfile|string[]|string $value     A single, or list of profiles
      * @return null|string
      */
     protected function appendRelatedProfileTags(&$tags, $namespace, $value)
@@ -133,11 +136,11 @@ class OpenGraphBuilder implements IOpenGraphObjectBuilder
 
     /**
      * Build a list of linked file tags for the specified value and append them to a string
-     * @param string $tags The current tag string to append these to
-     * @param string $namespace The namespace to use for this element
-     * @param IMediaFile[]|IMediaFile|File[]|File|string[]|string $value Either an File object, string to the (non https) image url, or a list of the former
-     * @param string $https The HTTPS url if available
-     * @param string $mimeType type to use, or null to auto detect
+     * @param string                                              $tags      The current tag string to append these to
+     * @param string                                              $namespace The namespace to use for this element
+     * @param IMediaFile[]|IMediaFile|File[]|File|string[]|string $value     Either an File object, string to the (non https) image url, or a list of the former
+     * @param string                                              $https     The HTTPS url if available
+     * @param string                                              $mimeType  type to use, or null to auto detect
      */
     protected function appendMediaMetaTags(&$tags, $namespace, $value, $https = null, $mimeType = null)
     {
@@ -154,6 +157,7 @@ class OpenGraphBuilder implements IOpenGraphObjectBuilder
         }
 
         // Handle File objects
+        /** @var DBFile|File $value */
         if ($value instanceof File || $value instanceof DBFile) {
             if (!$value->exists()) {
                 return;
@@ -164,14 +168,14 @@ class OpenGraphBuilder implements IOpenGraphObjectBuilder
              * If you have the mediadata extension installed, this should correctly populate video width/height elements
              * @link https://github.com/tractorcow/silverstripe-mediadata
              */
-            $this->AppendTag($tags, "$namespace:width", $value->Width);
-            $this->AppendTag($tags, "$namespace:height", $value->Height);
+            $this->AppendTag($tags, "$namespace:width", $value->getWidth());
+            $this->AppendTag($tags, "$namespace:height", $value->getHeight());
             return;
         }
 
         // Handle IMediaFile objects
-        if ($value instanceof IMediaFile) {
-            $this->appendMediaMetaTags($tags, $namespace, $value->getAbsoluteURL(), $https, $value->getType());
+        if ($this->implementsType($value, IMediaFile::class)) {
+            $this->appendMediaMetaTags($tags, $namespace, $value->getAbsoluteURL(), $value->getSecureURL(), $value->getType());
             $this->AppendTag($tags, "$namespace:width", $value->getWidth());
             $this->AppendTag($tags, "$namespace:height", $value->getHeight());
             return;
@@ -229,9 +233,12 @@ class OpenGraphBuilder implements IOpenGraphObjectBuilder
         }
     }
 
+    /**
+     * @param string            $tags
+     * @param IOGObjectExplicit $object
+     */
     protected function appendDefaultMetaTags(&$tags, $object)
     {
-        /* @var $object IOGObjectExplicit */
         $this->AppendTag($tags, 'og:title', $object->getOGTitle());
         $this->AppendTag($tags, 'og:type', $object->getOGType());
         $this->AppendTag($tags, 'og:url', $object->AbsoluteLink());
@@ -251,9 +258,12 @@ class OpenGraphBuilder implements IOpenGraphObjectBuilder
         $this->extend('updateDefaultMetaTags', $tags, $object);
     }
 
+    /**
+     * @param string         $tags
+     * @param IOGApplication $config
+     */
     protected function appendApplicationMetaTags(&$tags, $config)
     {
-        /* @var $config IOGApplication */
         $this->AppendTag($tags, 'fb:admins', $config->getOGAdminID());
         $this->AppendTag($tags, 'fb:app_id', $config->getOGApplicationID());
 

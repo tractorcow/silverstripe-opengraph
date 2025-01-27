@@ -8,7 +8,7 @@ use TractorCow\OpenGraph\OpenGraph;
 
 class OpenGraphTest extends SapphireTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         Config::modify()
@@ -18,7 +18,7 @@ class OpenGraphTest extends SapphireTest
             ->set(OpenGraph::class, 'default_tagbuilder', 'TractorCow\OpenGraph\ObjectBuilders\OpenGraphBuilder');
     }
 
-    public function testConfig()
+    public function testConfig(): void
     {
         $this->assertEquals('SiteConfig', OpenGraph::get_config('application_id'));
         $this->assertEquals('SiteConfig', OpenGraph::get_config('admin_id'));
@@ -26,7 +26,7 @@ class OpenGraphTest extends SapphireTest
         $this->assertEquals('TractorCow\OpenGraph\ObjectBuilders\OpenGraphBuilder', OpenGraph::get_default_tagbuilder());
     }
 
-    public function testLocaleValid()
+    public function testLocaleValid(): void
     {
         $this->assertTrue(OpenGraph::is_locale_valid('en_US'));
         $this->assertFalse(OpenGraph::is_locale_valid('en_EN'));

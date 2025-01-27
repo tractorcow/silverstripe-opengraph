@@ -8,28 +8,46 @@
         "opengraph"
     ],
     "license": "BSD-3-Clause",
-    "authors": [{
-        "name": "Damian Mooyman",
-        "email": "damian.mooyman@gmail.com"
-    }],
+    "authors": [
+        {
+            "name": "Damian Mooyman",
+            "email": "damian.mooyman@gmail.com"
+        }
+    ],
     "support": {
         "issues": "http://github.com/tractorcow/silverstripe-opengraph/issues"
     },
     "require": {
-        "silverstripe/recipe-core": "^1 || ^4",
-        "composer/installers": "*"
+        "silverstripe/framework": "^4 || ^5",
+        "silverstripe/siteconfig": "^4 || ^5"
     },
     "require-dev": {
-        "phpunit/PHPUnit": "^5.7",
-        "silverstripe/recipe-cms": "^1 || ^4"
+        "silverstripe/assets": "^1 || ^2",
+        "silverstripe/cms": "^4 || ^5",
+        "silverstripe/recipe-testing": "^3"
     },
     "extra": {
         "installer-name": "opengraph",
         "branch-alias": {
-            "dev-master": "4.x-dev"
+            "dev-master": "5.x-dev"
         },
         "expose": [
             "images"
+        ],
+        "project-files-installed": [
+            ".htaccess",
+            "app/.htaccess",
+            "app/_config/mimevalidator.yml",
+            "app/_config/mysite.yml",
+            "app/src/Page.php",
+            "app/src/PageController.php",
+            "behat.yml",
+            "phpunit.xml.dist"
+        ],
+        "public-files-installed": [
+            ".htaccess",
+            "index.php",
+            "web.config"
         ]
     },
     "scripts": {
@@ -46,5 +64,12 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "silverstripe/recipe-plugin": true,
+            "silverstripe/vendor-plugin": true
+        }
+    }
 }

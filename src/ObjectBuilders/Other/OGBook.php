@@ -7,8 +7,11 @@ use TractorCow\OpenGraph\ObjectBuilders\OpenGraphBuilder;
 
 class OGBook extends OpenGraphBuilder
 {
-
-    protected function appendBookTags(&$tags, IOGBook $book)
+    /**
+     * @param string  $tags
+     * @param IOGBook $book
+     */
+    protected function appendBookTags(&$tags, $book)
     {
         $this->appendRelatedProfileTags($tags, 'book:author', $book->getOGAuthors());
         $this->AppendTag($tags, 'book:isbn', $book->getOGBookISBN());

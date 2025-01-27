@@ -10,7 +10,7 @@ use SilverStripe\Assets\File;
  * Any fields in this can be used in a class that implements only {@see IOGObject},
  * but are not mandatory.
  * @author Damian Mooyman
- * @see IOGObject
+ * @see    IOGObject
  */
 interface IOGObjectExplicit extends IOGObjectRequired
 {
@@ -18,19 +18,19 @@ interface IOGObjectExplicit extends IOGObjectRequired
      * Any attached audio files
      * @return File[]|File|string[]|string The file(s) or url(s) to file(s)
      */
-    function getOGAudio();
+    public function getOGAudio();
 
     /**
      * Any attached video files
      * @return File[]|File|string[]|string The file(s) or url(s) to file(s)
      */
-    function getOGVideo();
+    public function getOGVideo();
 
     /**
      * Description for this opengraph object
      * @return string The description
      */
-    function getOGDescription();
+    public function getOGDescription();
 
     /**
      * The word that appears before this object's title in a sentence.
@@ -39,18 +39,18 @@ interface IOGObjectExplicit extends IOGObjectRequired
      * Default is "" (blank).
      * @return string The determiner
      */
-    function getOGDeterminer();
+    public function getOGDeterminer();
 
     /**
      * The locale(s) the opengraph tags are marked up in. Of the format language_TERRITORY. Default is en_US.
      * @return string[]|string The list of all locales given, or the sole locale. If multiple values are given the first
      * is treated as the default.
      */
-    function getOGLocales();
+    public function getOGLocales();
 
     /**
      * The name of this site
      * @return string The site name
      */
-    function getOGSiteName();
+    public function getOGSiteName();
 }

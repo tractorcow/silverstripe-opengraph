@@ -6,7 +6,11 @@ use TractorCow\OpenGraph\Interfaces\ObjectTypes\Music\IOGMusicRadioStation;
 
 class OGMusicRadioStation extends AbstractOGMusic
 {
-    protected function appendRadioStationTags(&$tags, IOGMusicRadioStation $station)
+    /**
+     * @param string               $tags
+     * @param IOGMusicRadioStation $station
+     */
+    protected function appendRadioStationTags(&$tags, $station)
     {
         $this->appendRelatedProfileTags($tags, 'music:creator', $station->getOGMusicCreators());
     }

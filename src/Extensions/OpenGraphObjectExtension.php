@@ -7,10 +7,13 @@ use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\i18n\i18n;
 use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBText;
 use SilverStripe\SiteConfig\SiteConfig;
+use SilverStripe\View\SSViewer;
 use TractorCow\OpenGraph\Constants\OGDeterminers;
 use TractorCow\OpenGraph\Constants\OGTypes;
+use TractorCow\OpenGraph\InspectionTrait;
 use TractorCow\OpenGraph\Interfaces\IOpenGraphObjectBuilder;
 use TractorCow\OpenGraph\Interfaces\ObjectTypes\IOGObjectExplicit;
 use TractorCow\OpenGraph\Interfaces\ObjectTypes\Music\IOGMusic;
@@ -25,10 +28,12 @@ use TractorCow\OpenGraph\OpenGraph;
  * Adds open graph functionality to a page or data object
  *
  * @author Damian Mooyman
+ * @property DataObject|OpenGraphObjectExtension $owner
  */
 class OpenGraphObjectExtension extends DataExtension implements IOGObjectExplicit
 {
     use Configurable;
+    use InspectionTrait;
 
     /**
      * The default image to use
@@ -39,6 +44,15 @@ class OpenGraphObjectExtension extends DataExtension implements IOGObjectExplici
     private static $default_image = 'tractorcow/silverstripe-opengraph: images/logo.gif';
 
     /**
+     * Do not escpae HTML
+     *
+     * @var string
+     */
+    private static $casting = [
+        'OGNS' => 'HTMLFragment',
+    ];
+
+    /**
      * Property for retrieving the opengraph namespace html tag(s).
      * This should be inserted into your Page.SS template as: "<html $OGNS>"
      * @return string The HTML tag to use for the opengraph namespace(s)
@@ -47,22 +61,24 @@ class OpenGraphObjectExtension extends DataExtension implements IOGObjectExplici
     {
         // todo : Should custom namespace be injected here, or left up to user code?
         $ns = ' prefix="og: http://ogp.me/ns#  fb: http://www.facebook.com/2008/fbml';
-        if ($this->owner instanceof IOGMusic) {
+        if ($this->implementsType($this->owner, IOGMusic::class)) {
             $ns .= ' music: http://ogp.me/ns/music#';
         }
-        if ($this->owner instanceof IOGVideo) {
+        if ($this->implementsType($this->owner, IOGVideo::class)) {
             $ns .= ' video: http://ogp.me/ns/video#';
         }
-        if ($this->owner instanceof IOGArticle) {
+        if ($this->implementsType($this->owner, IOGArticle::class)) {
             $ns .= ' article: http://ogp.me/ns/article#';
         }
-        if ($this->owner instanceof IOGBook) {
+        if ($this->implementsType($this->owner, IOGBook::class)) {
             $ns .= ' book: http://ogp.me/ns/book#';
         }
-        if ($this->owner instanceof IOGProfile) {
+        if ($this->implementsType($this->owner, IOGProfile::class)) {
             $ns .= ' profile: http://ogp.me/ns/profile#';
         }
-        if ($this->owner instanceof IOGWebsite || $this->owner->getOGType() == OGTypes::DEFAULT_TYPE) {
+        if ($this->implementsType($this->owner, IOGWebsite::class)
+            || $this->owner->getOGType() == OGTypes::DEFAULT_TYPE
+        ) {
             $ns .= ' website: http://ogp.me/ns/website#';
         }
         $ns .= '"';
@@ -75,7 +91,7 @@ class OpenGraphObjectExtension extends DataExtension implements IOGObjectExplici
      * Determines the tag builder to use for this object
      * @return IOpenGraphObjectBuilder
      */
-    protected function getTagBuilder()
+    public function getTagBuilder()
     {
         // Determine type
         $type = $this->owner->getOGType();
@@ -100,7 +116,7 @@ class OpenGraphObjectExtension extends DataExtension implements IOGObjectExplici
     public function MetaTags(&$tags)
     {
         // Generate tag builder
-        $builder = $this->getTagBuilder();
+        $builder = $this->owner->getTagBuilder();
         if (!$builder) {
             return;
         }
@@ -139,6 +155,20 @@ class OpenGraphObjectExtension extends DataExtension implements IOGObjectExplici
 
     public function getOGImage()
     {
+        // If a theme is in use, check if a default image is provided (theme_name_default_image)
+        // This is useful to have a different default image on sub sites
+        if (SSViewer::config()->uninherited('theme_enabled') === true) {
+            $themes = SSViewer::get_themes();
+            if (isset($themes[0])) {
+                $themeName = preg_replace('/[^\w ]+/ ', '_', strtolower($themes[0]));
+                $config = $themeName . '_default_image';
+
+                if ($image = self::config()->{$config}) {
+                    return Director::absoluteURL(ModuleResourceLoader::resourceURL($image));
+                }
+            }
+        }
+
         // Since og:image is a required property, provide a reasonable default
         if ($image = self::config()->default_image) {
             return Director::absoluteURL(ModuleResourceLoader::resourceURL($image));
@@ -165,9 +195,11 @@ class OpenGraphObjectExtension extends DataExtension implements IOGObjectExplici
     {
         // Check MetaDescription has given content
         if ($this->owner->hasField('MetaDescription')) {
-            $description = trim($this->owner->MetaDescription);
-            if (!empty($description)) {
-                return $description;
+            if ($this->owner->MetaDescription != null || $this->owner->MetaDescription != '') {
+                $description = trim($this->owner->MetaDescription);
+                if (!empty($description)) {
+                    return $description;
+                }
             }
         }
 

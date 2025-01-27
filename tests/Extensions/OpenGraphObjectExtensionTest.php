@@ -15,7 +15,7 @@ class OpenGraphObjectExtensionTest extends SapphireTest
         TestProfile::class
     ];
 
-    public function testOGNS()
+    public function testOGNS(): void
     {
         $page = $this->objFromFixture(TestPage::class, 'page1');
         $this->assertEquals(
@@ -24,7 +24,7 @@ class OpenGraphObjectExtensionTest extends SapphireTest
         );
     }
 
-    public function testOGType()
+    public function testOGType(): void
     {
         $page = $this->objFromFixture(TestPage::class, 'page1');
         $this->assertEquals('website', $page->getOGType());

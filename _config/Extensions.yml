@@ -3,8 +3,8 @@ name: 'opengraphextensions'
 ---
 Page:
   extensions:
-    - TractorCow\OpenGraph\Extensions\OpenGraphObjectExtension
+    opengraph: TractorCow\OpenGraph\Extensions\OpenGraphObjectExtension
 
 SilverStripe\SiteConfig\SiteConfig:
   extensions:
-    - TractorCow\OpenGraph\Extensions\OpenGraphSiteConfigExtension
+    opengraph: TractorCow\OpenGraph\Extensions\OpenGraphSiteConfigExtension

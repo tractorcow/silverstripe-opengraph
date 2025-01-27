@@ -10,20 +10,21 @@ use SilverStripe\Core\Config\Configurable;
 class OpenGraph
 {
     use Configurable;
+    use InspectionTrait;
 
     /**
      * Registers a new Opengraph object type
-     * @param string $type The value of the og:type property
+     * @param string $type                 The value of the og:type property
      * @param string $identifyingInterface The name of the interface required to identify objects. Must extend {@link IOGObject}
-     * @param string $tagBuilderClass The class name which takes an object implementing the $requiredInterface interface
-     * and generates meta tags. Must implement {@link IOpenGraphObjectBuilder}. The default builder will be used if none
-     * is given
+     * @param string $tagBuilderClass      The class name which takes an object implementing the $requiredInterface interface
+     *                                     and generates meta tags. Must implement {@link IOpenGraphObjectBuilder}. The default builder will be used if none
+     *                                     is given
      */
     public static function register_type($type, $identifyingInterface, $tagBuilderClass = null)
     {
         self::set_config('types', array(
             $type => array(
-                'interface' => $identifyingInterface,
+                'interface'  => $identifyingInterface,
                 'tagbuilder' => $tagBuilderClass
             )
         ));
@@ -49,12 +50,10 @@ class OpenGraph
      */
     public static function get_object_type($object)
     {
-
         $types = self::get_config('types');
-
         foreach ($types as $type => $details) {
             $interface = $details['interface'];
-            if ($object instanceof $interface) {
+            if (static::implementsType($object, $interface)) {
                 return $type;
             }
         }
